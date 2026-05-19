@@ -516,7 +516,10 @@
             </ul>
           </div>
           <div class="image">
-            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+            <img
+              src="Image/Table1_nooverlap.png"
+              alt="Table 1: Downstream Results"
+            />
           </div>
         </div>
       </div>
@@ -538,7 +541,10 @@
             </ul>
           </div>
           <div class="image">
-            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+            <img
+              src="Image/Table1_highlow.png"
+              alt="Table 1: Downstream Results"
+            />
           </div>
         </div>
       </div>
@@ -548,13 +554,18 @@
         <div class="two-column">
           <div class="text">
             <ul>
-              <li>Full Overlap and High-similarity Overlap perform comparably</li>
+              <li>
+                Full Overlap and High-similarity Overlap perform comparably
+              </li>
               <li>Differences often not statistically significant</li>
               <li>Adding false friends on top of cognates doesn't hurt much</li>
             </ul>
           </div>
           <div class="image">
-            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+            <img
+              src="Image/Table1_fullhigh.png"
+              alt="Table 1: Downstream Results"
+            />
           </div>
         </div>
       </div>
@@ -573,121 +584,9 @@
             </ul>
           </div>
           <div class="image">
-            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+            <img src="Image/Table1_lownon.png" alt="Table 1: Downstream Results" />
           </div>
         </div>
-      </div>
-
-      <div class="slide">
-        <h1>Embedding Space Analysis</h1>
-        <ul>
-          <li>
-            Before downstream tasks: what do the learned representations look
-            like?
-          </li>
-          <li>
-            For each overlapping token: measure cosine similarity between L1 and
-            L2 embeddings
-          </li>
-          <li>
-            Does the model represent the same form similarly across languages?
-          </li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Embedding Result 1: Full & High-sim. Overlap</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>
-                High-similarity tokens → very similar embeddings across
-                languages
-              </li>
-              <li>Low-similarity tokens → more distinct embeddings</li>
-              <li>Model correctly distinguishes cognates from false friends</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img
-              src="Image/Figure2_full_highsim.png"
-              alt="Embedding Result 1"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="slide">
-        <h1>Embedding Result 2: Low-sim. Overlap</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>False friends are forced to share an embedding</li>
-              <li>
-                Result: model represents them as similar — even though meanings
-                differ
-              </li>
-              <li>Embedding space is "misled" by the shared token ID</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img src="Image/Figure2_lowsim.png" alt="Embedding Result 2" />
-          </div>
-        </div>
-      </div>
-
-      <div class="slide">
-        <h1>Embedding Result 3: No Overlap</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>
-                Without any shared tokens, cross-lingual similarity is weak
-              </li>
-              <li>
-                Even cognates are represented differently across languages
-              </li>
-              <li>No shared vocabulary → no cross-lingual structure</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img src="Image/Figure2_nooverlap.png" alt="Embedding Result 3" />
-          </div>
-        </div>
-      </div>
-
-      <div class="slide">
-        <h1>Key Insight: Overlap Creates Anchors</h1>
-        <ul>
-          <li>
-            Shared tokens act as cross-lingual anchors in the embedding space
-          </li>
-          <li>
-            These anchors propagate structure to neighboring tokens via
-            attention
-          </li>
-          <li>
-            Even "wrong" anchors (false friends) are better than no anchors
-          </li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Language Distance Matters</h1>
-        <ul>
-          <li>
-            For closely related languages (Spanish, German): Low-sim. and
-            High-sim. perform similarly
-          </li>
-          <li>
-            For distant languages (Chinese, Arabic): High-sim. has a clear
-            advantage
-          </li>
-          <li>
-            More distant → less contextual signal to compensate for misleading
-            anchors
-          </li>
-        </ul>
       </div>
 
       <div class="slide">
@@ -723,7 +622,7 @@
         </ul>
       </div>
 
-      <div class="slide">
+      <!-- <div class="slide">
         <h1>Practical Implication</h1>
         <ul>
           <li>Multilingual tokenizer design: don't reduce overlap</li>
@@ -745,7 +644,7 @@
             tokenizer designs
           </li>
         </ul>
-      </div>
+      </div> -->
 
       <div class="slide">
         <h1>Thank You</h1>
@@ -755,7 +654,6 @@
             Multilingual Language Models
           </li>
           <li>Kallini et al., EMNLP 2025</li>
-          <li>Questions?</li>
         </ul>
       </div>
     </div>
