@@ -506,48 +506,76 @@
 
       <div class="slide">
         <h1>Result 1: No Overlap is Always Worst</h1>
-        <ul>
-          <li>Across all 6 language pairs, all tasks</li>
-          <li>XNLI accuracy on L2: No Overlap often drops to ~33-42%</li>
-          <li>With any overlap: 49-75%</li>
-          <li>Shared vocabulary is always beneficial for transfer</li>
-        </ul>
+        <div class="two-column">
+          <div class="text">
+            <ul>
+              <li>Across all 6 language pairs, all tasks</li>
+              <li>XNLI accuracy on L2: No Overlap often drops to ~33-42%</li>
+              <li>With any overlap: 49-75%</li>
+              <li>Shared vocabulary is always beneficial for transfer</li>
+            </ul>
+          </div>
+          <div class="image">
+            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+          </div>
+        </div>
       </div>
 
       <div class="slide">
         <h1>Result 2: High-sim. > Low-sim.</h1>
-        <ul>
-          <li>
-            High-similarity Overlap consistently outperforms Low-similarity
-            Overlap
-          </li>
-          <li>
-            Especially for typologically distant languages (Chinese, Arabic,
-            Turkish)
-          </li>
-          <li>Semantically aligned tokens contribute most to transfer</li>
-        </ul>
+        <div class="two-column">
+          <div class="text">
+            <ul>
+              <li>
+                High-similarity Overlap consistently outperforms Low-similarity
+                Overlap
+              </li>
+              <li>
+                Especially for typologically distant languages (Chinese, Arabic,
+                Turkish)
+              </li>
+              <li>Semantically aligned tokens contribute most to transfer</li>
+            </ul>
+          </div>
+          <div class="image">
+            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+          </div>
+        </div>
       </div>
 
       <div class="slide">
         <h1>Result 3: Full ≈ High-sim.</h1>
-        <ul>
-          <li>Full Overlap and High-similarity Overlap perform comparably</li>
-          <li>Differences often not statistically significant</li>
-          <li>Adding false friends on top of cognates doesn't hurt much</li>
-        </ul>
+        <div class="two-column">
+          <div class="text">
+            <ul>
+              <li>Full Overlap and High-similarity Overlap perform comparably</li>
+              <li>Differences often not statistically significant</li>
+              <li>Adding false friends on top of cognates doesn't hurt much</li>
+            </ul>
+          </div>
+          <div class="image">
+            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+          </div>
+        </div>
       </div>
 
       <div class="slide">
         <h1>But Low-sim. Still Beats No Overlap</h1>
-        <ul>
-          <li>Even sharing only false friends helps transfer</li>
-          <li>
-            Counterintuitive: misleading anchors are still better than no
-            anchors
-          </li>
-          <li>Any shared embedding creates some cross-lingual structure</li>
-        </ul>
+        <div class="two-column">
+          <div class="text">
+            <ul>
+              <li>Even sharing only false friends helps transfer</li>
+              <li>
+                Counterintuitive: misleading anchors are still better than no
+                anchors
+              </li>
+              <li>Any shared embedding creates some cross-lingual structure</li>
+            </ul>
+          </div>
+          <div class="image">
+            <img src="Image/Table1.png" alt="Table 1: Downstream Results" />
+          </div>
+        </div>
       </div>
 
       <div class="slide">

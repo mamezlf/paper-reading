@@ -1,9 +1,7 @@
 # Prompt: Improve Slide Design and Add Images
 
 ## Task
-
 You have an existing HTML slide deck at `paper_reading/slides.html`. Please do two things:
-
 1. Redesign the visual style to be cleaner and more polished
 2. Add images from the `paper_reading/Image/` folder to the appropriate slides
 
@@ -30,20 +28,23 @@ Redesign the slide deck with the following direction:
 
 The images are located in `paper_reading/Image/`. Add them to the following slides according to this mapping:
 
-| Slide                                       | Image file       | Notes                                     |
-| ------------------------------------------- | ---------------- | ----------------------------------------- |
-| Slide 16 (No Overlap: Example)              | `figure1(d).png` | No Overlap condition diagram              |
-| Slide 18 (Low-similarity Overlap: Example)  | `Figure1(c).png` | Low-sim condition diagram                 |
-| Slide 20 (High-similarity Overlap: Example) | `Figure1(b).png` | High-sim condition diagram                |
-| Slide 22 (Four Conditions: Summary)         | `Figure1.png`    | Full Figure 1 showing all four conditions |
-| Slide 30 (Embedding Result 1)               | `Figure2_full_highsim.png`    | Full Figure 2 embedding analysis          |
-| Slide 31 (Embedding Result 2)               | `Figure2_lowsim.png`    | Same Figure 2, different slide context    |
-| Slide 32 (Embedding Result 3)               | `Figure2_nooverlap.png`    | Same Figure 2, different slide context    |
+| Slide | Image file | Notes |
+|-------|-----------|-------|
+| Slide 16 (No Overlap: Example) | `figure1(d).png` | No Overlap condition diagram |
+| Slide 18 (Low-similarity Overlap: Example) | `Figure1(c).png` | Low-sim condition diagram |
+| Slide 20 (High-similarity Overlap: Example) | `Figure1(b).png` | High-sim condition diagram |
+| Slide 22 (Four Conditions: Summary) | `Figure1.png` | Full Figure 1 showing all four conditions |
+| Slide 25 (No Overlap is Always Worst) | `Table1.png` | Downstream task results table |
+| Slide 26 (High-sim. > Low-sim.) | `Table1.png` | Same table, different discussion focus |
+| Slide 27 (Full ≈ High-sim.) | `Table1.png` | Same table, different discussion focus |
+| Slide 28 (Low-sim. Still Beats No Overlap) | `Table1.png` | Same table, different discussion focus |
+| Slide 30 (Embedding Result 1) | `Figure2_full_highsim.png` | Figure 2 annotated: Full & High-sim. columns highlighted |
+| Slide 31 (Embedding Result 2) | `Figure2_lowsim.png` | Figure 2 annotated: Low-sim. column highlighted |
+| Slide 32 (Embedding Result 3) | `Figure2_nooverlap.png` | Figure 2 annotated: No Overlap column highlighted |
 
 Use relative paths to reference the images (e.g. `Image/Figure1.png`). Do not embed images as base64.
 
 ---
 
 ## Output
-
 Overwrite `paper_reading/slides.html` with the updated version.
