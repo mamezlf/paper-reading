@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
     :root {
       --bg-color: #0f1117;
@@ -177,6 +178,13 @@
       opacity: 0.3;
     }
 
+    .formula {
+      margin-top: 2rem;
+      font-size: 1.6rem;
+      color: var(--text-color);
+      text-align: center;
+    }
+
     @media (max-width: 1024px) {
       #presentation {
         padding: 3rem;
@@ -334,6 +342,14 @@
         <li>For L2: tokens NOT in the shared set → ID shifted by +N</li>
         <li>Tokens IN the shared set → ID unchanged, embedding shared</li>
       </ul>
+      <div class="formula">
+        \[
+        x'_i = \begin{cases}
+        x_i + N, & \ell = L_2 \text{ and } x_i \notin O' \\
+        x_i, & \text{otherwise}
+        \end{cases}
+        \]
+      </div>
     </div>
 
     <div class="slide">
@@ -341,8 +357,8 @@
       <ul>
         <li>Tokenize both language corpora with XLM-R</li>
         <li>
-          Find tokens with identical forms in both languages → native overlap
-          set O
+          Find tokens with identical forms in both languages → native overlap set
+          <span class="math">\( O = V_1 \cap V_2 \)</span>
         </li>
         <li>These are the candidates for sharing</li>
       </ul>
@@ -355,7 +371,10 @@
           For each overlapping token, compute cross-lingual semantic
           similarity
         </li>
-        <li>Use contextual embeddings from XLM-R</li>
+        <li>
+          Use contextual embeddings from XLM-R:
+          <span class="math">\( \text{sim}(t) = \cos(e_1, e_2) \)</span>
+        </li>
         <li>Rank all overlapping tokens by similarity score</li>
         <li>
           Top half → High-similarity set; Bottom half → Low-similarity set
@@ -369,6 +388,7 @@
         <div class="text">
           <ul>
             <li>All L2 token IDs shifted by +N</li>
+            <div class="formula">\( O' = \emptyset \)</div>
             <li>No shared embeddings between languages</li>
             <li>The two languages are completely isolated</li>
             <li>Baseline: what happens with zero cross-lingual anchors?</li>
@@ -405,6 +425,7 @@
               Only tokens with the LOWEST cross-lingual semantic similarity are
               shared
             </li>
+            <div class="formula">\( O' = O_{lo} \)</div>
             <li>False friends: same form, different meaning</li>
             <li>手紙／手纸 → shared embedding</li>
             <li>True cognates: NOT shared</li>
@@ -446,6 +467,7 @@
               Only tokens with the HIGHEST cross-lingual semantic similarity are
               shared
             </li>
+            <div class="formula">\( O' = O_{hi} \)</div>
             <li>Cognates: same form, same meaning</li>
             <li>经济 (Chinese) / 経済 (Japanese) → shared embedding</li>
             <li>False friends: NOT shared</li>
@@ -481,6 +503,7 @@
         <li>
           All natively overlapping tokens are shared — regardless of meaning
         </li>
+        <div class="formula">\( O' = O \)</div>
         <li>
           This is what real multilingual models (e.g., XLM-R) do by default
         </li>
