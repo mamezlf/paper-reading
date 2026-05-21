@@ -1,628 +1,642 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Paper Reading: False Friends Are Not Foes</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg-color: #0f1117;
-        --text-color: #e8e8e8;
-        --accent-color: #4ecdc4;
-        --secondary-text: #888888;
-        --font-family: "DM Sans", sans-serif;
-      }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paper Reading: False Friends Are Not Foes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-color: #0f1117;
+      --text-color: #e8e8e8;
+      --accent-color: #4ecdc4;
+      --secondary-text: #888888;
+      --font-family: "DM Sans", sans-serif;
+    }
 
-      body {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        font-family: var(--font-family);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-      }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #presentation {
+      flex-grow: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1200px;
+      text-align: left;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      color: var(--accent-color);
+      margin-bottom: 3rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
+    li {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    li::before {
+      content: "•";
+      color: var(--accent-color);
+      position: absolute;
+      left: 0;
+    }
+
+    .slide-1 {
+      text-align: center;
+    }
+
+    .slide-1 h1 {
+      font-size: 4rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .slide-1 .meta {
+      text-align: center;
+      font-size: 1.6rem;
+      color: var(--secondary-text);
+    }
+
+    .slide-1 .meta div {
+      margin-bottom: 0.75rem;
+    }
+
+    /* Two-column layout for slides with images */
+    .two-column {
+      display: flex;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+
+    .two-column .text {
+      flex: 1;
+    }
+
+    .two-column .image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .two-column img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 8px;
+      box-shadow: none;
+    }
+
+    #controls {
+      position: fixed;
+      bottom: 2rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 2rem;
+      pointer-events: auto;
+    }
+
+    button {
+      background: transparent;
+      color: var(--text-color);
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button:hover {
+      opacity: 1;
+    }
+
+    #counter {
+      position: fixed;
+      bottom: 2rem;
+      right: 3rem;
+      font-size: 1rem;
+      color: var(--secondary-text);
+    }
+
+    #hint {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      font-size: 0.9rem;
+      color: var(--secondary-text);
+      opacity: 0.3;
+    }
+
+    @media (max-width: 1024px) {
       #presentation {
-        flex-grow: 1;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6rem;
-      }
-
-      .slide {
-        display: none;
-        width: 100%;
-        max-width: 1200px;
-        text-align: left;
-      }
-
-      .slide.active {
-        display: flex;
-        flex-direction: column;
+        padding: 3rem;
       }
 
       h1 {
-        font-size: 3.5rem;
-        color: var(--accent-color);
-        margin-bottom: 3rem;
-        font-weight: 700;
-        line-height: 1.1;
-      }
-
-      ul {
-        list-style-type: none;
+        font-size: 2.5rem;
       }
 
       li {
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-        padding-left: 1.5rem;
-        position: relative;
-        line-height: 1.5;
+        font-size: 1.4rem;
       }
 
-      li::before {
-        content: "•";
-        color: var(--accent-color);
-        position: absolute;
-        left: 0;
-      }
-
-      .slide-1 {
-        text-align: center;
-      }
-      .slide-1 h1 {
-        font-size: 4rem;
-        margin-bottom: 3rem;
-        text-align: center;
-      }
-      .slide-1 .meta {
-        text-align: center;
-        font-size: 1.6rem;
-        color: var(--secondary-text);
-      }
-      .slide-1 .meta div {
-        margin-bottom: 0.75rem;
-      }
-
-      /* Two-column layout for slides with images */
       .two-column {
-        display: flex;
-        gap: 4rem;
-        align-items: flex-start;
-      }
-      .two-column .text {
-        flex: 1;
-      }
-      .two-column .image {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .two-column img {
-        max-width: 100%;
-        max-height: 60vh;
-        border-radius: 8px;
-        box-shadow: none;
-      }
-
-      #controls {
-        position: fixed;
-        bottom: 2rem;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        pointer-events: none;
-      }
-
-      .nav-buttons {
-        display: flex;
+        flex-direction: column;
         gap: 2rem;
-        pointer-events: auto;
       }
+    }
+  </style>
+</head>
 
-      button {
-        background: transparent;
-        color: var(--text-color);
-        border: none;
-        cursor: pointer;
-        font-size: 1.5rem;
-        opacity: 0.5;
-        transition: opacity 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+<body>
+  <div id="presentation">
+    <div class="slide slide-1 active">
+      <h1>
+        False Friends Are Not Foes: Investigating Vocabulary Overlap in
+        Multilingual Language Models
+      </h1>
+      <div class="meta">
+        <div>Kallini et al., EMNLP 2025</div>
+        <div>Paper Reading — Lingfang Zhang — 2026-05-22</div>
+      </div>
+    </div>
 
-      button:hover {
-        opacity: 1;
-      }
+    <div class="slide">
+      <h1>A Familiar Situation</h1>
+      <ul>
+        <li>
+          When you learn a foreign language, some words feel instantly
+          familiar
+        </li>
+        <li>Same form, same meaning → easy to learn</li>
+        <li>Same form, different meaning → dangerous</li>
+      </ul>
+    </div>
 
-      #counter {
-        position: fixed;
-        bottom: 2rem;
-        right: 3rem;
-        font-size: 1rem;
-        color: var(--secondary-text);
-      }
+    <div class="slide">
+      <h1>Example: Japanese & Chinese</h1>
+      <ul>
+        <li>手紙 (tegami) in Japanese → letter</li>
+        <li>手纸 (shǒuzhǐ) in Chinese → toilet paper</li>
+        <li>Same characters, completely different meanings</li>
+      </ul>
+    </div>
 
-      #hint {
-        position: fixed;
-        top: 2rem;
-        right: 2rem;
-        font-size: 0.9rem;
-        color: var(--secondary-text);
-        opacity: 0.3;
-      }
+    <div class="slide">
+      <h1>Example: English & German</h1>
+      <ul>
+        <li>"gift" in English → present</li>
+        <li>"Gift" in German → poison</li>
+        <li>Identical form, opposite meanings</li>
+      </ul>
+    </div>
 
-      @media (max-width: 1024px) {
-        #presentation {
-          padding: 3rem;
-        }
-        h1 {
-          font-size: 2.5rem;
-        }
-        li {
-          font-size: 1.4rem;
-        }
-        .two-column {
-          flex-direction: column;
-          gap: 2rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="presentation">
-      <div class="slide slide-1 active">
-        <h1>
-          False Friends Are Not Foes: Investigating Vocabulary Overlap in
-          Multilingual Language Models
-        </h1>
-        <div class="meta">
-          <div>Kallini et al., EMNLP 2025</div>
-          <div>Paper Reading — Lingfang Zhang — 2026-05-22</div>
+    <div class="slide">
+      <h1>The Same Problem in NLP</h1>
+      <ul>
+        <li>
+          Multilingual tokenizers assign the same token ID to words with
+          identical forms across languages
+        </li>
+        <li>They share the same embedding — regardless of meaning</li>
+        <li>Does this help or hurt cross-lingual transfer?</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Background: What is Token Overlap?</h1>
+      <ul>
+        <li>
+          Multilingual tokenizers are trained on concatenated corpora from
+          multiple languages
+        </li>
+        <li>Words with identical forms naturally get the same token ID</li>
+        <li>This is called "token overlap"</li>
+        <li>
+          Examples: named entities (Batman), punctuation, cognates, false
+          friends
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Why Does It Matter?</h1>
+      <ul>
+        <li>Shared token IDs → shared embeddings</li>
+        <li>
+          The model sees the same vector for the same form, regardless of
+          language
+        </li>
+        <li>
+          This could create cross-lingual anchors… or introduce confusion
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Prior Work: Mixed Evidence</h1>
+      <ul>
+        <li>Some work: overlap helps zero-shot cross-lingual transfer</li>
+        <li>Other work: overlap hurts performance on certain tasks</li>
+        <li>Missing piece: does the type of overlap matter?</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>The Key Question</h1>
+      <ul>
+        <li>Not all overlapping tokens are equal</li>
+        <li>Some share form AND meaning (cognates)</li>
+        <li>Some share form but NOT meaning (false friends)</li>
+        <li>
+          How does semantic similarity of shared tokens affect transfer?
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Experimental Design Overview</h1>
+      <ul>
+        <li>
+          Train bilingual autoregressive models (GPT-2 scale, 85M params)
+        </li>
+        <li>6 language pairs, all English-centric</li>
+        <li>4 vocabulary overlap settings</li>
+        <li>Evaluate on downstream tasks: XNLI, XQuAD</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>6 Language Pairs</h1>
+      <ul>
+        <li>English–Spanish, English–German (closely related)</li>
+        <li>English–Turkish, English–Arabic (distant)</li>
+        <li>English–Chinese (different script)</li>
+        <li>English–Swahili (low-resource)</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>How to Control Overlap?</h1>
+      <ul>
+        <li>Base tokenizer: XLM-R (vocabulary size N)</li>
+        <li>For L1: all token IDs unchanged</li>
+        <li>For L2: tokens NOT in the shared set → ID shifted by +N</li>
+        <li>Tokens IN the shared set → ID unchanged, embedding shared</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Finding the Overlapping Tokens</h1>
+      <ul>
+        <li>Tokenize both language corpora with XLM-R</li>
+        <li>
+          Find tokens with identical forms in both languages → native overlap
+          set O
+        </li>
+        <li>These are the candidates for sharing</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Ranking by Semantic Similarity</h1>
+      <ul>
+        <li>
+          For each overlapping token, compute cross-lingual semantic
+          similarity
+        </li>
+        <li>Use contextual embeddings from XLM-R</li>
+        <li>Rank all overlapping tokens by similarity score</li>
+        <li>
+          Top half → High-similarity set; Bottom half → Low-similarity set
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Condition 1: No Overlap</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>All L2 token IDs shifted by +N</li>
+            <li>No shared embeddings between languages</li>
+            <li>The two languages are completely isolated</li>
+            <li>Baseline: what happens with zero cross-lingual anchors?</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/figure1(d).png" alt="No Overlap Example" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>A Familiar Situation</h1>
-        <ul>
-          <li>
-            When you learn a foreign language, some words feel instantly
-            familiar
-          </li>
-          <li>Same form, same meaning → easy to learn</li>
-          <li>Same form, different meaning → dangerous</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Example: Japanese & Chinese</h1>
-        <ul>
-          <li>手紙 (tegami) in Japanese → letter</li>
-          <li>手纸 (shǒuzhǐ) in Chinese → toilet paper</li>
-          <li>Same characters, completely different meanings</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Example: English & German</h1>
-        <ul>
-          <li>"gift" in English → present</li>
-          <li>"Gift" in German → poison</li>
-          <li>Identical form, opposite meanings</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>The Same Problem in NLP</h1>
-        <ul>
-          <li>
-            Multilingual tokenizers assign the same token ID to words with
-            identical forms across languages
-          </li>
-          <li>They share the same embedding — regardless of meaning</li>
-          <li>Does this help or hurt cross-lingual transfer?</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Background: What is Token Overlap?</h1>
-        <ul>
-          <li>
-            Multilingual tokenizers are trained on concatenated corpora from
-            multiple languages
-          </li>
-          <li>Words with identical forms naturally get the same token ID</li>
-          <li>This is called "token overlap"</li>
-          <li>
-            Examples: named entities (Batman), punctuation, cognates, false
-            friends
-          </li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Why Does It Matter?</h1>
-        <ul>
-          <li>Shared token IDs → shared embeddings</li>
-          <li>
-            The model sees the same vector for the same form, regardless of
-            language
-          </li>
-          <li>
-            This could create cross-lingual anchors… or introduce confusion
-          </li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Prior Work: Mixed Evidence</h1>
-        <ul>
-          <li>Some work: overlap helps zero-shot cross-lingual transfer</li>
-          <li>Other work: overlap hurts performance on certain tasks</li>
-          <li>Missing piece: does the type of overlap matter?</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>The Key Question</h1>
-        <ul>
-          <li>Not all overlapping tokens are equal</li>
-          <li>Some share form AND meaning (cognates)</li>
-          <li>Some share form but NOT meaning (false friends)</li>
-          <li>
-            How does semantic similarity of shared tokens affect transfer?
-          </li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Experimental Design Overview</h1>
-        <ul>
-          <li>
-            Train bilingual autoregressive models (GPT-2 scale, 85M params)
-          </li>
-          <li>6 language pairs, all English-centric</li>
-          <li>4 vocabulary overlap settings</li>
-          <li>Evaluate on downstream tasks: XNLI, XQuAD</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>6 Language Pairs</h1>
-        <ul>
-          <li>English–Spanish, English–German (closely related)</li>
-          <li>English–Turkish, English–Arabic (distant)</li>
-          <li>English–Chinese (different script)</li>
-          <li>English–Swahili (low-resource)</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>How to Control Overlap?</h1>
-        <ul>
-          <li>Base tokenizer: XLM-R (vocabulary size N)</li>
-          <li>For L1: all token IDs unchanged</li>
-          <li>For L2: tokens NOT in the shared set → ID shifted by +N</li>
-          <li>Tokens IN the shared set → ID unchanged, embedding shared</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Finding the Overlapping Tokens</h1>
-        <ul>
-          <li>Tokenize both language corpora with XLM-R</li>
-          <li>
-            Find tokens with identical forms in both languages → native overlap
-            set O
-          </li>
-          <li>These are the candidates for sharing</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Ranking by Semantic Similarity</h1>
-        <ul>
-          <li>
-            For each overlapping token, compute cross-lingual semantic
-            similarity
-          </li>
-          <li>Use contextual embeddings from XLM-R</li>
-          <li>Rank all overlapping tokens by similarity score</li>
-          <li>
-            Top half → High-similarity set; Bottom half → Low-similarity set
-          </li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Condition 1: No Overlap</h1>
-        <ul>
-          <li>All L2 token IDs shifted by +N</li>
-          <li>No shared embeddings between languages</li>
-          <li>The two languages are completely isolated</li>
-          <li>Baseline: what happens with zero cross-lingual anchors?</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>No Overlap: Example</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>手紙 (Japanese) → token ID: 1042</li>
-              <li>手纸 (Chinese) → token ID: 1042 + N</li>
-              <li>Model treats them as completely different words</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img src="Image/figure1(d).png" alt="No Overlap Example" />
-          </div>
+    <div class="slide">
+      <h1>No Overlap: Example</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>手紙 (Japanese) → token ID: 1042</li>
+            <li>手纸 (Chinese) → token ID: 1042 + N</li>
+            <li>Model treats them as completely different words</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/figure1(d).png" alt="No Overlap Example" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Condition 2: Low-similarity Overlap</h1>
-        <ul>
-          <li>
-            Only tokens with the LOWEST cross-lingual semantic similarity are
-            shared
-          </li>
-          <li>False friends: same form, different meaning</li>
-          <li>手紙／手纸 → shared embedding</li>
-          <li>True cognates: NOT shared</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Low-similarity Overlap: Example</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>
-                手紙 (Japanese, "letter") and 手纸 (Chinese, "toilet paper")
-              </li>
-              <li>Same token ID → same embedding</li>
-              <li>
-                The model is forced to represent two different meanings with one
-                vector
-              </li>
-            </ul>
-          </div>
-          <div class="image">
-            <img
-              src="Image/Figure1(c).png"
-              alt="Low-similarity Overlap Example"
-            />
-          </div>
+    <div class="slide">
+      <h1>Condition 2: Low-similarity Overlap</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>
+              Only tokens with the LOWEST cross-lingual semantic similarity are
+              shared
+            </li>
+            <li>False friends: same form, different meaning</li>
+            <li>手紙／手纸 → shared embedding</li>
+            <li>True cognates: NOT shared</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Figure1(c).png" alt="Low-similarity Overlap Example" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Condition 3: High-similarity Overlap</h1>
-        <ul>
-          <li>
-            Only tokens with the HIGHEST cross-lingual semantic similarity are
-            shared
-          </li>
-          <li>Cognates: same form, same meaning</li>
-          <li>经济 (Chinese) / 経済 (Japanese) → shared embedding</li>
-          <li>False friends: NOT shared</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>High-similarity Overlap: Example</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>经济 (Chinese, "economy") and 経済 (Japanese, "economy")</li>
-              <li>Same token ID → same embedding</li>
-              <li>
-                The model correctly links two words that mean the same thing
-              </li>
-            </ul>
-          </div>
-          <div class="image">
-            <img
-              src="Image/Figure1(b).png"
-              alt="High-similarity Overlap Example"
-            />
-          </div>
+    <div class="slide">
+      <h1>Low-similarity Overlap: Example</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>
+              手紙 (Japanese, "letter") and 手纸 (Chinese, "toilet paper")
+            </li>
+            <li>Same token ID → same embedding</li>
+            <li>
+              The model is forced to represent two different meanings with one
+              vector
+            </li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Figure1(c).png" alt="Low-similarity Overlap Example" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Condition 4: Full Overlap</h1>
-        <ul>
-          <li>
-            All natively overlapping tokens are shared — regardless of meaning
-          </li>
-          <li>
-            This is what real multilingual models (e.g., XLM-R) do by default
-          </li>
-          <li>Mix of cognates, false friends, named entities, punctuation</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Four Conditions: Summary</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>No Overlap → complete isolation</li>
-              <li>Low-sim. Overlap → only false friends shared</li>
-              <li>High-sim. Overlap → only cognates shared</li>
-              <li>Full Overlap → everything shared</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img src="Image/Figure1.png" alt="Four Conditions Summary" />
-          </div>
+    <div class="slide">
+      <h1>Condition 3: High-similarity Overlap</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>
+              Only tokens with the HIGHEST cross-lingual semantic similarity are
+              shared
+            </li>
+            <li>Cognates: same form, same meaning</li>
+            <li>经济 (Chinese) / 経済 (Japanese) → shared embedding</li>
+            <li>False friends: NOT shared</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Figure1(b).png" alt="High-similarity Overlap Example" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Downstream Tasks</h1>
-        <ul>
-          <li>Zero-shot cross-lingual transfer setup</li>
-          <li>Fine-tune on English, evaluate on L2</li>
-          <li>XNLI: natural language inference</li>
-          <li>XQuAD: question answering</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Results Overview</h1>
-        <ul>
-          <li>Main finding: any overlap is better than no overlap</li>
-          <li>
-            No Overlap performs significantly worse across all language pairs
-            and tasks
-          </li>
-          <li>The type of overlap also matters</li>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <h1>Result 1: No Overlap is Always Worst</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>Across all 6 language pairs, all tasks</li>
-              <li>XNLI accuracy on L2: No Overlap often drops to ~33-42%</li>
-              <li>With any overlap: 49-75%</li>
-              <li>Shared vocabulary is always beneficial for transfer</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img
-              src="Image/Table1_nooverlap.png"
-              alt="Table 1: Downstream Results"
-            />
-          </div>
+    <div class="slide">
+      <h1>High-similarity Overlap: Example</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>经济 (Chinese, "economy") and 経済 (Japanese, "economy")</li>
+            <li>Same token ID → same embedding</li>
+            <li>
+              The model correctly links two words that mean the same thing
+            </li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Figure1(b).png" alt="High-similarity Overlap Example" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Result 2: High-sim. > Low-sim.</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>
-                High-similarity Overlap consistently outperforms Low-similarity
-                Overlap
-              </li>
-              <li>
-                Especially for typologically distant languages (Chinese, Arabic,
-                Turkish)
-              </li>
-              <li>Semantically aligned tokens contribute most to transfer</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img
-              src="Image/Table1_highlow.png"
-              alt="Table 1: Downstream Results"
-            />
-          </div>
+    <div class="slide">
+      <h1>Condition 4: Full Overlap</h1>
+      <ul>
+        <li>
+          All natively overlapping tokens are shared — regardless of meaning
+        </li>
+        <li>
+          This is what real multilingual models (e.g., XLM-R) do by default
+        </li>
+        <li>Mix of cognates, false friends, named entities, punctuation</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Four Conditions: Summary</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>No Overlap → complete isolation</li>
+            <li>Low-sim. Overlap → only false friends shared</li>
+            <li>High-sim. Overlap → only cognates shared</li>
+            <li>Full Overlap → everything shared</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Figure1.png" alt="Four Conditions Summary" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Result 3: Full ≈ High-sim.</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>
-                Full Overlap and High-similarity Overlap perform comparably
-              </li>
-              <li>Differences often not statistically significant</li>
-              <li>Adding false friends on top of cognates doesn't hurt much</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img
-              src="Image/Table1_fullhigh.png"
-              alt="Table 1: Downstream Results"
-            />
-          </div>
+    <div class="slide">
+      <h1>Downstream Tasks</h1>
+      <ul>
+        <li>Zero-shot cross-lingual transfer setup</li>
+        <li>Fine-tune on English, evaluate on L2</li>
+        <li>XNLI: natural language inference</li>
+        <li>XQuAD: question answering</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Results Overview</h1>
+      <ul>
+        <li>Main finding: any overlap is better than no overlap</li>
+        <li>
+          No Overlap performs significantly worse across all language pairs
+          and tasks
+        </li>
+        <li>The type of overlap also matters</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Result 1: No Overlap is Always Worst</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>Across all 6 language pairs, all tasks</li>
+            <li>XNLI accuracy on L2: No Overlap often drops to ~33-42%</li>
+            <li>With any overlap: 49-75%</li>
+            <li>Shared vocabulary is always beneficial for transfer</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Table1_nooverlap.png" alt="Table 1: Downstream Results" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>But Low-sim. Still Beats No Overlap</h1>
-        <div class="two-column">
-          <div class="text">
-            <ul>
-              <li>Even sharing only false friends helps transfer</li>
-              <li>
-                Counterintuitive: misleading anchors are still better than no
-                anchors
-              </li>
-              <li>Any shared embedding creates some cross-lingual structure</li>
-            </ul>
-          </div>
-          <div class="image">
-            <img src="Image/Table1_lownon.png" alt="Table 1: Downstream Results" />
-          </div>
+    <div class="slide">
+      <h1>Result 2: High-sim. > Low-sim.</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>
+              High-similarity Overlap consistently outperforms Low-similarity
+              Overlap
+            </li>
+            <li>
+              Especially for typologically distant languages (Chinese, Arabic,
+              Turkish)
+            </li>
+            <li>Semantically aligned tokens contribute most to transfer</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Table1_highlow.png" alt="Table 1: Downstream Results" />
         </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Takeaway 1</h1>
-        <ul>
-          <li>
-            Shared vocabulary is always beneficial for cross-lingual transfer
-          </li>
-          <li>No Overlap is significantly worse in every setting tested</li>
-        </ul>
+    <div class="slide">
+      <h1>Result 3: Full ≈ High-sim.</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>
+              Full Overlap and High-similarity Overlap perform comparably
+            </li>
+            <li>Differences often not statistically significant</li>
+            <li>Adding false friends on top of cognates doesn't hurt much</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Table1_fullhigh.png" alt="Table 1: Downstream Results" />
+        </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Takeaway 2</h1>
-        <ul>
-          <li>The semantic similarity of shared tokens matters</li>
-          <li>
-            High-similarity overlap (cognates) contributes most to transfer
-            performance
-          </li>
-        </ul>
+    <div class="slide">
+      <h1>But Low-sim. Still Beats No Overlap</h1>
+      <div class="two-column">
+        <div class="text">
+          <ul>
+            <li>Even sharing only false friends helps transfer</li>
+            <li>
+              Counterintuitive: misleading anchors are still better than no
+              anchors
+            </li>
+            <li>Any shared embedding creates some cross-lingual structure</li>
+          </ul>
+        </div>
+        <div class="image">
+          <img src="Image/Table1_lownon.png" alt="Table 1: Downstream Results" />
+        </div>
       </div>
+    </div>
 
-      <div class="slide">
-        <h1>Takeaway 3</h1>
-        <ul>
-          <li>False friends are not foes</li>
-          <li>
-            Even semantically misaligned overlap creates useful cross-lingual
-            structure
-          </li>
-          <li>Better to share than not to share</li>
-        </ul>
-      </div>
+    <div class="slide">
+      <h1>Takeaway 1</h1>
+      <ul>
+        <li>
+          Shared vocabulary is always beneficial for cross-lingual transfer
+        </li>
+        <li>No Overlap is significantly worse in every setting tested</li>
+      </ul>
+    </div>
 
-      <!-- <div class="slide">
+    <div class="slide">
+      <h1>Takeaway 2</h1>
+      <ul>
+        <li>The semantic similarity of shared tokens matters</li>
+        <li>
+          High-similarity overlap (cognates) contributes most to transfer
+          performance
+        </li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Takeaway 3</h1>
+      <ul>
+        <li>False friends are not foes</li>
+        <li>
+          Even semantically misaligned overlap creates useful cross-lingual
+          structure
+        </li>
+        <li>Better to share than not to share</li>
+      </ul>
+    </div>
+
+    <!-- <div class="slide">
         <h1>Practical Implication</h1>
         <ul>
           <li>Multilingual tokenizer design: don't reduce overlap</li>
@@ -646,90 +660,91 @@
         </ul>
       </div> -->
 
-      <div class="slide">
-        <h1>Thank You</h1>
-        <ul>
-          <li>
-            False Friends Are Not Foes: Investigating Vocabulary Overlap in
-            Multilingual Language Models
-          </li>
-          <li>Kallini et al., EMNLP 2025</li>
-        </ul>
-      </div>
+    <div class="slide">
+      <h1>Thank You</h1>
+      <ul>
+        <li>
+          False Friends Are Not Foes: Investigating Vocabulary Overlap in
+          Multilingual Language Models
+        </li>
+        <li>Kallini et al., EMNLP 2025</li>
+      </ul>
     </div>
+  </div>
 
-    <div id="controls">
-      <div class="nav-buttons">
-        <button id="prevBtn" title="Previous (Left Arrow)">←</button>
-        <button id="nextBtn" title="Next (Right Arrow / Space)">→</button>
-      </div>
+  <div id="controls">
+    <div class="nav-buttons">
+      <button id="prevBtn" title="Previous (Left Arrow)">←</button>
+      <button id="nextBtn" title="Next (Right Arrow / Space)">→</button>
     </div>
+  </div>
 
-    <div id="counter">1 / 40</div>
-    <script>
-      const slides = document.querySelectorAll(".slide");
-      const counter = document.getElementById("counter");
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      let currentSlide = 0;
+  <div id="counter">1 / 40</div>
+  <script>
+    const slides = document.querySelectorAll(".slide");
+    const counter = document.getElementById("counter");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    let currentSlide = 0;
 
-      function updateSlide() {
-        slides.forEach((slide, index) => {
-          slide.classList.toggle("active", index === currentSlide);
-        });
-        counter.textContent = currentSlide + 1 + " / " + slides.length;
-        window.location.hash = "slide-" + (currentSlide + 1);
-      }
-
-      function nextSlide() {
-        if (currentSlide < slides.length - 1) {
-          currentSlide++;
-          updateSlide();
-        }
-      }
-
-      function prevSlide() {
-        if (currentSlide > 0) {
-          currentSlide--;
-          updateSlide();
-        }
-      }
-
-      nextBtn.addEventListener("click", nextSlide);
-      prevBtn.addEventListener("click", prevSlide);
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowRight" || e.key === " ") {
-          nextSlide();
-        } else if (e.key === "ArrowLeft") {
-          prevSlide();
-        } else if (e.key.toLowerCase() === "f") {
-          toggleFullScreen();
-        }
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === currentSlide);
       });
+      counter.textContent = currentSlide + 1 + " / " + slides.length;
+      window.location.hash = "slide-" + (currentSlide + 1);
+    }
 
-      function toggleFullScreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch((err) => {
-            console.error(
-              "Error attempting to enable full-screen mode: " + err.message,
-            );
-          });
-        } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          }
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    nextBtn.addEventListener("click", nextSlide);
+    prevBtn.addEventListener("click", prevSlide);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") {
+        nextSlide();
+      } else if (e.key === "ArrowLeft") {
+        prevSlide();
+      } else if (e.key.toLowerCase() === "f") {
+        toggleFullScreen();
+      }
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.error(
+            "Error attempting to enable full-screen mode: " + err.message,
+          );
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
         }
       }
+    }
 
-      const hash = window.location.hash;
-      if (hash && hash.startsWith("#slide-")) {
-        const slideNum = parseInt(hash.replace("#slide-", ""));
-        if (!isNaN(slideNum) && slideNum > 0 && slideNum <= slides.length) {
-          currentSlide = slideNum - 1;
-          updateSlide();
-        }
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#slide-")) {
+      const slideNum = parseInt(hash.replace("#slide-", ""));
+      if (!isNaN(slideNum) && slideNum > 0 && slideNum <= slides.length) {
+        currentSlide = slideNum - 1;
+        updateSlide();
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
