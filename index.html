@@ -372,9 +372,7 @@
             2026 / 06 / 10
           </div>
         </div>
-        <div class="footer">
-          <span>Title</span><span>01 / 13</span>
-        </div>
+        <div class="footer"><span>Title</span><span>01 / 16</span></div>
       </section>
 
       <!-- Slide 2: The Original Paper -->
@@ -399,7 +397,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Kallini et al., 2025</span><span>02 / 13</span>
+          <span>Kallini et al., 2025</span><span>02 / 16</span>
         </div>
       </section>
 
@@ -432,7 +430,7 @@
             alignment?
           </p>
         </div>
-        <div class="footer"><span>JA–ZH Testbed</span><span>03 / 13</span></div>
+        <div class="footer"><span>JA–ZH Testbed</span><span>03 / 16</span></div>
       </section>
 
       <!-- Slide 4: Why Kanji Sharing? -->
@@ -460,39 +458,17 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Bilingual LM Research</span><span>04 / 13</span>
+          <span>Bilingual LM Research</span><span>04 / 16</span>
         </div>
       </section>
 
-      <!-- Slide 5: Scale of Overlap -->
-      <section class="slide">
-        <h2>Challenges</h2>
-        <h3>Scale of Overlap</h3>
-        <div class="slide-content">
-          <ul>
-            <li>English-X overlap is sparse (~40%)</li>
-            <li>
-              Japanese–Chinese overlap is <strong>extremely dense</strong>
-            </li>
-            <li>Native overlap |O| ≈ <strong>26,360 tokens</strong></li>
-            <li>
-              <strong>Only ~4,276 are kanji</strong>
-            </li>
-            <li>Majority (~72%) from Latin characters, digits, and symbols — <strong>not kanji</strong></li>
-          </ul>
-        </div>
-        <div class="footer">
-          <span>Vocabulary Density</span><span>05 / 13</span>
-        </div>
-      </section>
-
-      <!-- Slide 6: Overlap Composition -->
+      <!-- Slide 5: Overlap Composition -->
       <section class="slide">
         <h2>Challenges</h2>
         <h3>Overlap Composition</h3>
         <div class="slide-content">
           <p>The native overlap <code>O</code> breaks down as follows:</p>
-          <table style="font-size: 1.1rem; margin: 1rem 0;">
+          <table style="font-size: 1.1rem; margin: 1rem 0">
             <thead>
               <tr>
                 <th>Category</th>
@@ -530,11 +506,124 @@
           </table>
         </div>
         <div class="footer">
-          <span>Overlap Breakdown</span><span>06 / 13</span>
+          <span>Overlap Breakdown</span><span>05 / 16</span>
         </div>
       </section>
 
-      <!-- Slide 7: Similarity Partitioning -->
+      <!-- Slide 6: Scale of Overlap -->
+      <section class="slide">
+        <h2>Challenges</h2>
+        <h3>Scale of Overlap</h3>
+        <div class="slide-content">
+          <ul>
+            <li>Native overlap |O| ≈ <strong>26,360 tokens</strong></li>
+            <li><strong>Only ~4,276 are kanji</strong> (~17% of |O|)</li>
+            <li>
+              Majority (~72%) from Latin characters, digits, and symbols —
+              <strong>not kanji</strong>
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Vocabulary Density</span><span>06 / 16</span>
+        </div>
+      </section>
+
+      <!-- Slide 7: Same Surface Form -->
+      <section class="slide">
+        <h2>Motivation</h2>
+        <h3>Same Surface Form ≠ Same Meaning</h3>
+        <div class="slide-content">
+          <table>
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Japanese</th>
+                <th>Chinese</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>学生</strong></td>
+                <td>student</td>
+                <td>student</td>
+              </tr>
+              <tr>
+                <td><strong>経済</strong></td>
+                <td>economy</td>
+                <td>economy</td>
+              </tr>
+              <tr>
+                <td><strong>手紙</strong></td>
+                <td>letter</td>
+                <td>toilet paper</td>
+              </tr>
+              <tr>
+                <td><strong>娘</strong></td>
+                <td>daughter</td>
+                <td>mother</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="footer">
+          <span>Semantic Ambiguity</span><span>07 / 16</span>
+        </div>
+      </section>
+
+      <!-- Slide 8: Research Question -->
+      <section class="slide">
+        <h2>Motivation</h2>
+        <h3>Research Question</h3>
+        <div class="slide-content">
+          <p>
+            Does the semantic similarity of shared kanji affect cross-lingual
+            embedding alignment?
+          </p>
+          <div class="grid-2">
+            <div class="accent-box" style="margin: 0">
+              <strong>Semantically similar kanji</strong><br />
+              e.g. 山（mountain）<br />→ JA ＝ ZH<br />
+              Sharing = meaningful anchor?
+            </div>
+            <div class="accent-box" style="margin: 0">
+              <strong>Semantically different kanji</strong><br />
+              e.g. 手紙（letter / toilet paper）<br />→ JA ≠ ZH<br />
+              Sharing = misleading signal?
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Research Focus</span><span>08 / 16</span>
+        </div>
+      </section>
+
+      <!-- Slide 9: Hypothesis -->
+      <section class="slide">
+        <h2>Motivation</h2>
+        <h3>Hypothesis</h3>
+        <div class="slide-content">
+          <p>
+            If overlap mainly works through <strong>semantic transfer</strong>,
+            then similarity should determine whether sharing helps.
+          </p>
+          <ul>
+            <li>
+              <strong>High-similarity kanji sharing</strong> should improve
+              alignment
+            </li>
+            <li>
+              <strong>Low-similarity kanji sharing</strong> may weaken alignment
+              or introduce interference
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Transfer Hypothesis</span><span>09 / 16</span>
+        </div>
+      </section>
+
+      <!-- Slide 10: Similarity Partitioning -->
       <section class="slide">
         <h2>Methodology</h2>
         <h3>Similarity Partitioning</h3>
@@ -576,11 +665,11 @@
           </p>
         </div>
         <div class="footer">
-          <span>Embedding Analysis</span><span>07 / 13</span>
+          <span>Embedding Analysis</span><span>10 / 16</span>
         </div>
       </section>
 
-      <!-- Slide 8: Layer Selection -->
+      <!-- Slide 11: Layer Selection -->
       <section class="slide">
         <h2>Methodology</h2>
         <h3>Layer Selection</h3>
@@ -600,10 +689,10 @@
             </li>
           </ul>
         </div>
-        <div class="footer"><span>XLM-R Sweep</span><span>08 / 13</span></div>
+        <div class="footer"><span>XLM-R Sweep</span><span>11 / 16</span></div>
       </section>
 
-      <!-- Slide 9: Experimental Design -->
+      <!-- Slide 12: Experimental Design -->
       <section class="slide">
         <h2>Design</h2>
         <h3>2×2 Factorial Conditions</h3>
@@ -649,11 +738,11 @@
           </p>
         </div>
         <div class="footer">
-          <span>Four Conditions</span><span>09 / 13</span>
+          <span>Four Conditions</span><span>12 / 16</span>
         </div>
       </section>
 
-      <!-- Slide 10: Data & Preprocessing -->
+      <!-- Slide 13: Data & Preprocessing -->
       <section class="slide">
         <h2>Training</h2>
         <h3>Data & Preprocessing</h3>
@@ -673,10 +762,10 @@
             </li>
           </ul>
         </div>
-        <div class="footer"><span>CCMatrix</span><span>10 / 13</span></div>
+        <div class="footer"><span>CCMatrix</span><span>13 / 16</span></div>
       </section>
 
-      <!-- Slide 11: Training Setup -->
+      <!-- Slide 14: Training Setup -->
       <section class="slide">
         <h2>Training</h2>
         <h3>Hyperparameters</h3>
@@ -713,11 +802,11 @@
           </div>
         </div>
         <div class="footer">
-          <span>Comparison Config</span><span>11 / 13</span>
+          <span>Comparison Config</span><span>14 / 16</span>
         </div>
       </section>
 
-      <!-- Slide 12: Model Architecture -->
+      <!-- Slide 15: Model Architecture -->
       <section class="slide">
         <h2>Training</h2>
         <h3>Model Architecture</h3>
@@ -728,7 +817,6 @@
             </li>
             <li><strong>Standard:</strong> RoPE Positional Encoding</li>
             <li><strong>Spec:</strong> 12 Layers / 12 Heads / 768 Hidden</li>
-            <li><strong>Params:</strong> ~85M non-embedding parameters</li>
             <li>
               <strong>Execution:</strong> 4 models trained
               <strong>from scratch</strong>
@@ -736,39 +824,38 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Llama GPT-2 Scale</span><span>12 / 13</span>
+          <span>Llama GPT-2 Scale</span><span>15 / 16</span>
         </div>
       </section>
 
-      <!-- Slide 13: Status & Next Steps -->
+      <!-- Slide 16: Status & Next Steps -->
       <section class="slide">
         <h2>Conclusion</h2>
         <h3>Status & Next Steps</h3>
         <div class="slide-content">
           <div class="accent-box">
             <strong>Training Status</strong>
-            4 models running on RTX A5000 (nohup monitoring)
+            models 00 (No) and 10 (High-sim) have completed 20k steps
           </div>
           <ul>
             <li>
-              <strong>Next:</strong> Step 3 — Embedding Similarity Analysis
+              <strong>Next:</strong> Embedding Similarity Analysis
             </li>
-            <li>Extract Layer 6 embeddings &rarr; compute cosine similarity</li>
+            <li>Extract Layer 9 embeddings &rarr; compute cosine similarity</li>
             <li>
               Produce <strong>violin plots</strong> to test alignment hypothesis
             </li>
           </ul>
         </div>
         <div class="footer">
-          <span>Progress Report</span><span>13 / 13</span>
+          <span>Progress Report</span><span>16 / 16</span>
         </div>
       </section>
     </div>
 
     <div id="nav">
-      <button class="nav-btn" id="edit-mode-btn">EDIT</button>
       <button class="nav-btn" id="prev">PREV</button>
-      <div id="counter">1 / 13</div>
+      <div id="counter">1 / 16</div>
       <button class="nav-btn" id="next">NEXT</button>
     </div>
 
@@ -835,7 +922,7 @@
       const exitBtn = document.getElementById("exit-edit");
       const resetBtn = document.getElementById("reset-content");
       const saveStatus = document.getElementById("save-status");
-      const STORAGE_KEY = "ppt_content_v2";
+      const STORAGE_KEY = "ppt_content_v3";
 
       const editableSelectors =
         "h1, h2, h3, p, li, td, .subtitle, .meta, .accent-box";
@@ -881,7 +968,9 @@
         }
       }
 
-      editBtn.onclick = () => toggleEditMode(true);
+      if (editBtn) {
+        editBtn.onclick = () => toggleEditMode(true);
+      }
       exitBtn.onclick = () => toggleEditMode(false);
       resetBtn.onclick = () => {
         if (confirm("Reset all changes to original content?")) {
@@ -917,35 +1006,6 @@
         const a = document.createElement("a");
         a.href = url;
         a.download = "index_v2_edited.html";
-        document.body.appendChild(a);
-        a.click();
-
-        // Cleanup
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        // Show success status
-        saveStatus.innerText = "DOWNLOADED";
-        saveStatus.classList.add("visible");
-        setTimeout(() => {
-          saveStatus.classList.remove("visible");
-          setTimeout(() => (saveStatus.innerText = "SAVED"), 300); // Reset text after fade out
-        }, 2000);
-      };
-
-      // Auto-save on input
-      document.addEventListener("input", (e) => {
-        if (document.body.classList.contains("edit-mode")) {
-          saveContent();
-        }
-      });
-
-      // Load on start
-      loadContent();
-    </script>
-  </body>
-</html>
-index_v2_edited.html";
         document.body.appendChild(a);
         a.click();
 
