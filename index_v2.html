@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What Does Kanji Sharing Change? - Research Meeting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #ffffff;
+        --text: #1a1a1a;
+        --text-muted: #666666;
+        --accent: #0052cc;
+        --border: #eeeeee;
+        --code-bg: #f5f5f5;
+        --sans: "Inter", "Noto Sans SC", sans-serif;
+        --mono: "JetBrains Mono", monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        overflow: hidden;
+        height: 100vh;
+      }
+
+      body.edit-mode [contenteditable] {
+        outline: 1px dashed var(--accent);
+        outline-offset: 4px;
+        cursor: text;
+      }
+
+      body.edit-mode [contenteditable]:focus {
+        outline: 2px solid var(--accent);
+        background: rgba(0, 82, 204, 0.03);
+      }
+
+      #edit-toolbar {
+        position: fixed;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--text);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        display: none;
+        align-items: center;
+        gap: 1.5rem;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        font-family: var(--mono);
+        font-size: 0.8rem;
+      }
+
+      body.edit-mode #edit-toolbar {
+        display: flex;
+      }
+
+      #save-status {
+        color: #4caf50;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      #save-status.visible {
+        opacity: 1;
+      }
+
+      .edit-btn-small {
+        background: none;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: var(--mono);
+        font-size: 0.7rem;
+      }
+
+      .edit-btn-small:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      #presentation {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 4rem; /* Give space for bottom nav */
+      }
+
+      .slide {
+        display: none;
+        width: 90%;
+        max-width: 1100px;
+        height: 80vh; /* Reduced back from 85vh */
+        padding: 2.5rem 3rem;
+        flex-direction: column;
+        justify-content: flex-start;
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        background: white;
+        position: relative;
+      }
+
+      .slide.active {
+        display: flex;
+      }
+
+      h1 {
+        font-size: 3.2rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 1.2rem;
+        letter-spacing: -0.02em;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      h3 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text);
+      }
+
+      p {
+        font-size: 1.25rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      ul {
+        list-style: none;
+        margin-top: 0.5rem;
+      }
+
+      li {
+        font-size: 1.25rem;
+        line-height: 1.5;
+        margin-bottom: 0.8rem;
+        padding-left: 1.8rem;
+        position: relative;
+      }
+
+      li::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .meta {
+        font-family: var(--mono);
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin-top: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .slide-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+        font-size: 1.2rem;
+      }
+
+      th,
+      td {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+      }
+
+      th {
+        background-color: var(--code-bg);
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+      }
+
+      code {
+        font-family: var(--mono);
+        background-color: var(--code-bg);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.9em;
+        color: var(--accent);
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+      }
+
+      #nav {
+        position: fixed;
+        bottom: 2rem;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        align-items: center;
+        z-index: 100;
+      }
+
+      .nav-btn {
+        background: none;
+        border: 1px solid var(--border);
+        padding: 0.6rem 1.2rem;
+        cursor: pointer;
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        transition: all 0.2s;
+        color: var(--text-muted);
+        border-radius: 4px;
+      }
+
+      .nav-btn:hover {
+        background: var(--text);
+        color: white;
+        border-color: var(--text);
+      }
+
+      #counter {
+        font-family: var(--mono);
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        min-width: 80px;
+        text-align: center;
+      }
+
+      .title-slide {
+        text-align: center;
+      }
+
+      .title-slide h1 {
+        font-size: 4.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .title-slide .subtitle {
+        font-size: 1.8rem;
+        color: var(--text-muted);
+        margin-bottom: 4rem;
+        font-weight: 300;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .accent-box {
+        background-color: #f8f9fa;
+        padding: 2rem;
+        border-left: 5px solid var(--accent);
+        margin: 1.5rem 0;
+        font-size: 1.3rem;
+      }
+
+      .accent-box strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      strong {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .footer {
+        position: absolute;
+        bottom: 2rem;
+        left: 3rem;
+        right: 3rem;
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        border-top: 1px solid var(--border);
+        padding-top: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+        h3 {
+          font-size: 1.8rem;
+        }
+        .slide {
+          padding: 1.5rem;
+          height: 90vh;
+        }
+        .grid-2 {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="edit-toolbar">
+      <span>EDIT MODE</span>
+      <span id="save-status">SAVED</span>
+      <button
+        class="edit-btn-small"
+        id="download-html"
+        style="border-color: #4caf50; color: #4caf50"
+      >
+        DOWNLOAD
+      </button>
+      <button class="edit-btn-small" id="reset-content">RESET</button>
+      <button
+        class="edit-btn-small"
+        id="exit-edit"
+        style="border-color: #ff4d4d; color: #ff4d4d"
+      >
+        DONE
+      </button>
+    </div>
+
+    <div id="presentation">
+      <!-- Slide 1: Title -->
+      <section class="slide title-slide active">
+        <div class="slide-content">
+          <h1>What Does Kanji Sharing Change?</h1>
+          <div class="subtitle">
+            Investigating The Effect of Shared Kanji Tokens in Japanese–Chinese
+            Language Models
+          </div>
+          <div class="meta">
+            RESEARCH MEETING ・ LINGFANG ZHANG<br />
+            2026 / 06 / 10
+          </div>
+        </div>
+        <div class="footer">
+          <span>Title</span><span>01 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 2: The Original Paper -->
+      <section class="slide">
+        <h2>Background</h2>
+        <h3>The Original Paper</h3>
+        <div class="slide-content">
+          <div class="accent-box">
+            <strong>"False Friends Are Not Foes" (Stanford, 2025)</strong>
+            Not all overlap is equal.
+          </div>
+          <ul>
+            <li>Trained bilingual models on 6 English-X language pairs</li>
+            <li>
+              Insight: <strong>semantic similarity</strong> of shared tokens
+              matters
+            </li>
+            <li>Tested: Full, High-sim, Low-sim, and No Overlap</li>
+            <li>
+              <strong>Finding:</strong> High-similarity overlap helps most
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Kallini et al., 2025</span><span>02 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 3: Why Japanese–Chinese? -->
+      <section class="slide">
+        <h2>Motivation</h2>
+        <h3>Why Japanese–Chinese?</h3>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div>
+              <ul>
+                <li>
+                  Original paper focused on
+                  <strong>English-centric</strong> pairs
+                </li>
+                <li><strong>Japanese & Chinese share Kanji (漢字)</strong></li>
+                <li>
+                  A natural testbed for the high-sim vs low-sim distinction
+                </li>
+              </ul>
+            </div>
+            <div class="accent-box">
+              <strong>Example: 手紙</strong>
+              JA: "letter" <br />
+              ZH: "toilet paper"
+            </div>
+          </div>
+          <p>
+            <strong>Question:</strong> Does sharing facilitate or hinder
+            alignment?
+          </p>
+        </div>
+        <div class="footer"><span>JA–ZH Testbed</span><span>03 / 13</span></div>
+      </section>
+
+      <!-- Slide 4: Why Kanji Sharing? -->
+      <section class="slide">
+        <h2>Background</h2>
+        <h3>Why Kanji Sharing?</h3>
+        <div class="slide-content">
+          <ul>
+            <li>
+              Japanese and Chinese share a large number of Kanji characters
+            </li>
+            <li>
+              Analysis of the XLM-R tokenizer reveals approximately
+              <strong>26,360 naturally overlapping tokens</strong>
+            </li>
+            <li>
+              Most overlaps are
+              <strong>digits, Latin characters, and punctuation</strong>, whose
+              meanings are largely language-independent
+            </li>
+            <li>
+              Kanji are the
+              <strong>primary source of meaningful overlap</strong>
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Bilingual LM Research</span><span>04 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 5: Scale of Overlap -->
+      <section class="slide">
+        <h2>Challenges</h2>
+        <h3>Scale of Overlap</h3>
+        <div class="slide-content">
+          <ul>
+            <li>English-X overlap is sparse (~40%)</li>
+            <li>
+              Japanese–Chinese overlap is <strong>extremely dense</strong>
+            </li>
+            <li>Native overlap |O| ≈ <strong>26,360 tokens</strong></li>
+            <li>
+              <strong>Only ~4,276 are kanji</strong>
+            </li>
+            <li>Majority (~72%) from Latin characters, digits, and symbols — <strong>not kanji</strong></li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Vocabulary Density</span><span>05 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 6: Overlap Composition -->
+      <section class="slide">
+        <h2>Challenges</h2>
+        <h3>Overlap Composition</h3>
+        <div class="slide-content">
+          <p>The native overlap <code>O</code> breaks down as follows:</p>
+          <table style="font-size: 1.1rem; margin: 1rem 0;">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Count</th>
+                <th>% of O</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Kanji-related</td>
+                <td>4,276</td>
+                <td>17.3%</td>
+              </tr>
+              <tr>
+                <td>Latin characters</td>
+                <td>18,929</td>
+                <td>71.8%</td>
+              </tr>
+              <tr>
+                <td>Digits</td>
+                <td>1,255</td>
+                <td>4.8%</td>
+              </tr>
+              <tr>
+                <td>Symbols / special tokens</td>
+                <td>1,581</td>
+                <td>6.0%</td>
+              </tr>
+              <tr>
+                <td>Other</td>
+                <td>300</td>
+                <td>1.1%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="footer">
+          <span>Overlap Breakdown</span><span>06 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 7: Similarity Partitioning -->
+      <section class="slide">
+        <h2>Methodology</h2>
+        <h3>Similarity Partitioning</h3>
+        <div class="slide-content">
+          <p>
+            For each token <code>t</code> in overlap set <code>O</code> (kanji
+            only, ~4,276 tokens):
+          </p>
+          <ol
+            style="
+              font-size: 1.2rem;
+              line-height: 1.8;
+              margin-left: 2rem;
+              margin-bottom: 2rem;
+            "
+          >
+            <li>Sample 100 sentences from JA & ZH CCMatrix</li>
+            <li>
+              Extract XLM-R contextual embeddings &rarr; static
+              <code>e_ja</code>, <code>e_zh</code>
+            </li>
+            <li>
+              Compute <strong>cosine similarity</strong> between
+              <code>e_ja</code> and <code>e_zh</code>
+            </li>
+          </ol>
+          <div class="grid-2">
+            <div class="accent-box" style="margin: 0">
+              <strong>OHI (~2,138 tokens)</strong><br />Top half (High-sim)
+            </div>
+            <div class="accent-box" style="margin: 0">
+              <strong>OLO (~2,138 tokens)</strong><br />Bottom half (Low-sim)
+            </div>
+          </div>
+          <p
+            style="font-size: 1rem; color: var(--text-muted); margin-top: 1rem"
+          >
+            * Non-kanji overlap (~22,066) always shared.
+          </p>
+        </div>
+        <div class="footer">
+          <span>Embedding Analysis</span><span>07 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 8: Layer Selection -->
+      <section class="slide">
+        <h2>Methodology</h2>
+        <h3>Layer Selection</h3>
+        <div class="slide-content">
+          <ul>
+            <li>Which XLM-R layer gives the best semantic signal?</li>
+            <li>
+              Layer sweep on <strong>JKVC dataset</strong> (JA–ZH cognates)
+            </li>
+            <li>Layers 1–12 tested; classification threshold sweep</li>
+            <li>
+              <strong>Result: Layer 9 achieved peak accuracy (0.6936)</strong>
+            </li>
+            <li>
+              All scores computed using <strong>Layer 9</strong> static
+              embeddings
+            </li>
+          </ul>
+        </div>
+        <div class="footer"><span>XLM-R Sweep</span><span>08 / 13</span></div>
+      </section>
+
+      <!-- Slide 9: Experimental Design -->
+      <section class="slide">
+        <h2>Design</h2>
+        <h3>2×2 Factorial Conditions</h3>
+        <div class="slide-content">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ohi (High-sim)</th>
+                <th>Olo (Low-sim)</th>
+                <th>Baseline Analogy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>00</strong></td>
+                <td>Separate</td>
+                <td>Separate</td>
+                <td>No Overlap</td>
+              </tr>
+              <tr>
+                <td><strong>01</strong></td>
+                <td>Separate</td>
+                <td><strong>Shared</strong></td>
+                <td>Low-sim Overlap</td>
+              </tr>
+              <tr>
+                <td><strong>10</strong></td>
+                <td><strong>Shared</strong></td>
+                <td>Separate</td>
+                <td>High-sim Overlap</td>
+              </tr>
+              <tr>
+                <td><strong>11</strong></td>
+                <td><strong>Shared</strong></td>
+                <td><strong>Shared</strong></td>
+                <td>Full Overlap</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 1rem; color: var(--text-muted)">
+            * Background tokens (~25k) shared across all conditions
+          </p>
+        </div>
+        <div class="footer">
+          <span>Four Conditions</span><span>09 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 10: Data & Preprocessing -->
+      <section class="slide">
+        <h2>Training</h2>
+        <h3>Data & Preprocessing</h3>
+        <div class="slide-content">
+          <ul>
+            <li><strong>Dataset:</strong> CCMatrix JA–ZH (5.68M pairs)</li>
+            <li>
+              <strong>Source:</strong>
+              <code>larryvrh/CCMatrix-v1-Ja_Zh-filtered</code>
+            </li>
+            <li>
+              <strong>Tokenizer:</strong> XLM-R SentencePiece (remat per
+              condition)
+            </li>
+            <li>
+              <strong>Interleaving:</strong> JA/ZH shuffled and interleaved
+            </li>
+          </ul>
+        </div>
+        <div class="footer"><span>CCMatrix</span><span>10 / 13</span></div>
+      </section>
+
+      <!-- Slide 11: Training Setup -->
+      <section class="slide">
+        <h2>Training</h2>
+        <h3>Hyperparameters</h3>
+        <div class="slide-content">
+          <div class="grid-2">
+            <table>
+              <tr>
+                <td>Total steps</td>
+                <td>20,000</td>
+              </tr>
+              <tr>
+                <td>Warmup steps</td>
+                <td>5,000</td>
+              </tr>
+              <tr>
+                <td>Learning rate</td>
+                <td>2.5e-4</td>
+              </tr>
+            </table>
+            <table>
+              <tr>
+                <td>Batch size</td>
+                <td>64</td>
+              </tr>
+              <tr>
+                <td>Seq length</td>
+                <td>512</td>
+              </tr>
+              <tr>
+                <td>Optimizer</td>
+                <td>AdamW</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Comparison Config</span><span>11 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 12: Model Architecture -->
+      <section class="slide">
+        <h2>Training</h2>
+        <h3>Model Architecture</h3>
+        <div class="slide-content">
+          <ul>
+            <li>
+              <strong>Model:</strong> LlamaForCausalLM (GPT-2 Small Scale)
+            </li>
+            <li><strong>Standard:</strong> RoPE Positional Encoding</li>
+            <li><strong>Spec:</strong> 12 Layers / 12 Heads / 768 Hidden</li>
+            <li><strong>Params:</strong> ~85M non-embedding parameters</li>
+            <li>
+              <strong>Execution:</strong> 4 models trained
+              <strong>from scratch</strong>
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Llama GPT-2 Scale</span><span>12 / 13</span>
+        </div>
+      </section>
+
+      <!-- Slide 13: Status & Next Steps -->
+      <section class="slide">
+        <h2>Conclusion</h2>
+        <h3>Status & Next Steps</h3>
+        <div class="slide-content">
+          <div class="accent-box">
+            <strong>Training Status</strong>
+            4 models running on RTX A5000 (nohup monitoring)
+          </div>
+          <ul>
+            <li>
+              <strong>Next:</strong> Step 3 — Embedding Similarity Analysis
+            </li>
+            <li>Extract Layer 6 embeddings &rarr; compute cosine similarity</li>
+            <li>
+              Produce <strong>violin plots</strong> to test alignment hypothesis
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Progress Report</span><span>13 / 13</span>
+        </div>
+      </section>
+    </div>
+
+    <div id="nav">
+      <button class="nav-btn" id="edit-mode-btn">EDIT</button>
+      <button class="nav-btn" id="prev">PREV</button>
+      <div id="counter">1 / 13</div>
+      <button class="nav-btn" id="next">NEXT</button>
+    </div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const counter = document.getElementById("counter");
+      let currentSlide = 0;
+
+      function updateSlide() {
+        slides.forEach((slide, index) => {
+          slide.classList.toggle("active", index === currentSlide);
+        });
+        counter.innerText = `${currentSlide + 1} / ${slides.length}`;
+      }
+
+      document.getElementById("next").onclick = () => {
+        if (currentSlide < slides.length - 1) {
+          currentSlide++;
+          updateSlide();
+        }
+      };
+
+      document.getElementById("prev").onclick = () => {
+        if (currentSlide > 0) {
+          currentSlide--;
+          updateSlide();
+        }
+      };
+
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "ArrowRight" ||
+          e.key === " " ||
+          e.key === "PageDown" ||
+          e.key === "ArrowDown"
+        ) {
+          if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            updateSlide();
+          }
+        } else if (
+          e.key === "ArrowLeft" ||
+          e.key === "PageUp" ||
+          e.key === "ArrowUp"
+        ) {
+          if (currentSlide > 0) {
+            currentSlide--;
+            updateSlide();
+          }
+        } else if (e.key === "Home") {
+          currentSlide = 0;
+          updateSlide();
+        } else if (e.key === "End") {
+          currentSlide = slides.length - 1;
+          updateSlide();
+        }
+      });
+
+      // Initialize
+      updateSlide();
+
+      /* ===== EDIT MODE LOGIC ===== */
+      const editBtn = document.getElementById("edit-mode-btn");
+      const exitBtn = document.getElementById("exit-edit");
+      const resetBtn = document.getElementById("reset-content");
+      const saveStatus = document.getElementById("save-status");
+      const STORAGE_KEY = "ppt_content_v2";
+
+      const editableSelectors =
+        "h1, h2, h3, p, li, td, .subtitle, .meta, .accent-box";
+
+      function toggleEditMode(on) {
+        document.body.classList.toggle("edit-mode", on);
+        const elements = document.querySelectorAll(editableSelectors);
+        elements.forEach((el) => {
+          // Don't make navigation or structural elements editable
+          if (!el.closest("#nav") && !el.closest("#edit-toolbar")) {
+            el.contentEditable = on;
+          }
+        });
+        if (!on) saveContent();
+      }
+
+      function saveContent() {
+        const content = {};
+        document.querySelectorAll(editableSelectors).forEach((el, index) => {
+          if (!el.closest("#nav") && !el.closest("#edit-toolbar")) {
+            content[index] = el.innerHTML;
+          }
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+
+        saveStatus.classList.add("visible");
+        setTimeout(() => saveStatus.classList.remove("visible"), 2000);
+      }
+
+      function loadContent() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const content = JSON.parse(saved);
+          document.querySelectorAll(editableSelectors).forEach((el, index) => {
+            if (
+              !el.closest("#nav") &&
+              !el.closest("#edit-toolbar") &&
+              content[index] !== undefined
+            ) {
+              el.innerHTML = content[index];
+            }
+          });
+        }
+      }
+
+      editBtn.onclick = () => toggleEditMode(true);
+      exitBtn.onclick = () => toggleEditMode(false);
+      resetBtn.onclick = () => {
+        if (confirm("Reset all changes to original content?")) {
+          localStorage.removeItem(STORAGE_KEY);
+          location.reload();
+        }
+      };
+
+      document.getElementById("download-html").onclick = () => {
+        // Ensure changes are saved to DOM
+        saveContent();
+
+        // Clone the document to modify it without affecting the live page
+        const clonedDoc = document.cloneNode(true);
+        const clonedBody = clonedDoc.body;
+
+        // Remove edit mode artifacts
+        clonedBody.classList.remove("edit-mode");
+        clonedDoc.querySelectorAll("[contenteditable]").forEach((el) => {
+          el.removeAttribute("contenteditable");
+        });
+
+        // Ensure edit toolbar is hidden in the exported version
+        // No need to remove it completely, just let the CSS hide it naturally when edit-mode class is gone
+
+        // Get the full HTML string
+        const htmlContent =
+          "<!DOCTYPE html>\n" + clonedDoc.documentElement.outerHTML;
+
+        // Create a blob and trigger download
+        const blob = new Blob([htmlContent], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "index_v2_edited.html";
+        document.body.appendChild(a);
+        a.click();
+
+        // Cleanup
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // Show success status
+        saveStatus.innerText = "DOWNLOADED";
+        saveStatus.classList.add("visible");
+        setTimeout(() => {
+          saveStatus.classList.remove("visible");
+          setTimeout(() => (saveStatus.innerText = "SAVED"), 300); // Reset text after fade out
+        }, 2000);
+      };
+
+      // Auto-save on input
+      document.addEventListener("input", (e) => {
+        if (document.body.classList.contains("edit-mode")) {
+          saveContent();
+        }
+      });
+
+      // Load on start
+      loadContent();
+    </script>
+  </body>
+</html>
+index_v2_edited.html";
+        document.body.appendChild(a);
+        a.click();
+
+        // Cleanup
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // Show success status
+        saveStatus.innerText = "DOWNLOADED";
+        saveStatus.classList.add("visible");
+        setTimeout(() => {
+          saveStatus.classList.remove("visible");
+          setTimeout(() => (saveStatus.innerText = "SAVED"), 300); // Reset text after fade out
+        }, 2000);
+      };
+
+      // Auto-save on input
+      document.addEventListener("input", (e) => {
+        if (document.body.classList.contains("edit-mode")) {
+          saveContent();
+        }
+      });
+
+      // Load on start
+      loadContent();
+    </script>
+  </body>
+</html>
