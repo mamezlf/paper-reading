@@ -300,6 +300,19 @@
         color: var(--accent);
       }
 
+      .figure-slide .slide-content {
+        justify-content: center;
+        align-items: center;
+      }
+
+      .slide-figure {
+        max-width: 92%;
+        max-height: 54vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+
       strong {
         color: var(--accent);
         font-weight: 600;
@@ -372,7 +385,7 @@
             2026 / 06 / 10
           </div>
         </div>
-        <div class="footer"><span>Title</span><span>01 / 16</span></div>
+        <div class="footer"><span>Title</span><span>01 / 20</span></div>
       </section>
 
       <!-- Slide 2: The Original Paper -->
@@ -397,7 +410,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Kallini et al., 2025</span><span>02 / 16</span>
+          <span>Kallini et al., 2025</span><span>02 / 20</span>
         </div>
       </section>
 
@@ -430,7 +443,7 @@
             alignment?
           </p>
         </div>
-        <div class="footer"><span>JA–ZH Testbed</span><span>03 / 16</span></div>
+        <div class="footer"><span>JA–ZH Testbed</span><span>03 / 20</span></div>
       </section>
 
       <!-- Slide 4: Why Kanji Sharing? -->
@@ -458,7 +471,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Bilingual LM Research</span><span>04 / 16</span>
+          <span>Bilingual LM Research</span><span>04 / 20</span>
         </div>
       </section>
 
@@ -506,7 +519,7 @@
           </table>
         </div>
         <div class="footer">
-          <span>Overlap Breakdown</span><span>05 / 16</span>
+          <span>Overlap Breakdown</span><span>05 / 20</span>
         </div>
       </section>
 
@@ -525,7 +538,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Vocabulary Density</span><span>06 / 16</span>
+          <span>Vocabulary Density</span><span>06 / 20</span>
         </div>
       </section>
 
@@ -567,7 +580,7 @@
           </table>
         </div>
         <div class="footer">
-          <span>Semantic Ambiguity</span><span>07 / 16</span>
+          <span>Semantic Ambiguity</span><span>07 / 20</span>
         </div>
       </section>
 
@@ -594,7 +607,7 @@
           </div>
         </div>
         <div class="footer">
-          <span>Research Focus</span><span>08 / 16</span>
+          <span>Research Focus</span><span>08 / 20</span>
         </div>
       </section>
 
@@ -619,7 +632,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Transfer Hypothesis</span><span>09 / 16</span>
+          <span>Transfer Hypothesis</span><span>09 / 20</span>
         </div>
       </section>
 
@@ -665,7 +678,7 @@
           </p>
         </div>
         <div class="footer">
-          <span>Embedding Analysis</span><span>10 / 16</span>
+          <span>Embedding Analysis</span><span>10 / 20</span>
         </div>
       </section>
 
@@ -689,7 +702,7 @@
             </li>
           </ul>
         </div>
-        <div class="footer"><span>XLM-R Sweep</span><span>11 / 16</span></div>
+        <div class="footer"><span>XLM-R Sweep</span><span>11 / 20</span></div>
       </section>
 
       <!-- Slide 12: Experimental Design -->
@@ -738,7 +751,7 @@
           </p>
         </div>
         <div class="footer">
-          <span>Four Conditions</span><span>12 / 16</span>
+          <span>Four Conditions</span><span>12 / 20</span>
         </div>
       </section>
 
@@ -762,7 +775,7 @@
             </li>
           </ul>
         </div>
-        <div class="footer"><span>CCMatrix</span><span>13 / 16</span></div>
+        <div class="footer"><span>CCMatrix</span><span>13 / 20</span></div>
       </section>
 
       <!-- Slide 14: Training Setup -->
@@ -802,7 +815,7 @@
           </div>
         </div>
         <div class="footer">
-          <span>Comparison Config</span><span>14 / 16</span>
+          <span>Comparison Config</span><span>14 / 20</span>
         </div>
       </section>
 
@@ -824,11 +837,118 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Llama GPT-2 Scale</span><span>15 / 16</span>
+          <span>Llama GPT-2 Scale</span><span>15 / 20</span>
         </div>
       </section>
 
-      <!-- Slide 16: Status & Next Steps -->
+      <!-- Slide 16: Embedding Analysis Method -->
+      <section class="slide">
+        <h2>Analysis</h2>
+        <h3>Embedding Analysis — Method</h3>
+        <div class="slide-content">
+          <p>
+            Goal: test whether kanji token sharing causes the model to learn
+            more or less aligned representations for JA and ZH.
+          </p>
+          <ul>
+            <li>Use a middle layer (<code>l = 9</code>) of each trained model</li>
+            <li>
+              For each token in <code>Ohi_500</code>, <code>Olo_500</code>,
+              and <code>Random_500</code>, sample up to 100 sentences per
+              language
+            </li>
+            <li>
+              Extract embeddings per token per language: <code>e_ja</code>,
+              <code>e_zh</code>
+            </li>
+            <li>Compute cosine similarity between <code>e_ja</code> and <code>e_zh</code></li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Embedding Method</span><span>16 / 20</span>
+        </div>
+      </section>
+
+      <!-- Slide 17: Token Groups -->
+      <section class="slide">
+        <h2>Analysis</h2>
+        <h3>Three Token Groups Compared</h3>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div>
+              <ul>
+                <li>
+                  <strong>Ohi_500</strong> (purple): high-similarity kanji;
+                  should be semantically similar between JA/ZH
+                </li>
+                <li>
+                  <strong>Olo_500</strong> (blue): low-similarity kanji;
+                  should be semantically distinct
+                </li>
+                <li>
+                  <strong>Random_500</strong> (gray): non-overlapping JA-only /
+                  ZH-only single-char tokens; anisotropy baseline
+                </li>
+              </ul>
+            </div>
+            <div class="accent-box" style="margin: 0">
+              <strong>Visualization</strong>
+              Results are shown as violin plots.
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Token Groups</span><span>17 / 20</span>
+        </div>
+      </section>
+
+      <!-- Slide 18: Condition 00 Violin Plot -->
+      <section class="slide figure-slide">
+        <h2>Analysis</h2>
+        <h3>Condition 00 Violin Plot</h3>
+        <div class="slide-content">
+          <img
+            class="slide-figure"
+            src="EA_cond00.png"
+            alt="Condition 00 embedding similarity violin plot"
+          />
+        </div>
+        <div class="footer">
+          <span>Condition 00 Plot</span><span>18 / 20</span>
+        </div>
+      </section>
+
+      <!-- Slide 19: Condition 00 Results -->
+      <section class="slide">
+        <h2>Analysis</h2>
+        <h3>Condition 00 Results</h3>
+        <div class="slide-content">
+          <div class="accent-box">
+            <strong>Condition 00</strong>
+            No kanji tokens shared: <code>Ohi</code> and <code>Olo</code> are
+            both disjoint.
+          </div>
+          <ul>
+            <li>
+              X-axis: token group; Y-axis: cosine similarity between
+              <code>e_ja</code> and <code>e_zh</code>
+            </li>
+            <li>
+              Even without kanji sharing, High-sim tokens show higher embedding
+              similarity (median ~0.78) than Low-sim tokens (median ~0.49)
+            </li>
+            <li>
+              Low-sim tokens show a broad distribution (~0.12–1.0), reflecting
+              genuine semantic divergence across languages
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Condition 00</span><span>19 / 20</span>
+        </div>
+      </section>
+
+      <!-- Slide 20: Status & Next Steps -->
       <section class="slide">
         <h2>Conclusion</h2>
         <h3>Status & Next Steps</h3>
@@ -841,21 +961,21 @@
             <li>
               <strong>Next:</strong> Embedding Similarity Analysis
             </li>
-            <li>Extract Layer 9 embeddings &rarr; compute cosine similarity</li>
+            <li>Extract embeddings &rarr; compute cosine similarity</li>
             <li>
               Produce <strong>violin plots</strong> to test alignment hypothesis
             </li>
           </ul>
         </div>
         <div class="footer">
-          <span>Progress Report</span><span>16 / 16</span>
+          <span>Progress Report</span><span>20 / 20</span>
         </div>
       </section>
     </div>
 
     <div id="nav">
       <button class="nav-btn" id="prev">PREV</button>
-      <div id="counter">1 / 16</div>
+      <div id="counter">1 / 20</div>
       <button class="nav-btn" id="next">NEXT</button>
     </div>
 
@@ -922,7 +1042,7 @@
       const exitBtn = document.getElementById("exit-edit");
       const resetBtn = document.getElementById("reset-content");
       const saveStatus = document.getElementById("save-status");
-      const STORAGE_KEY = "ppt_content_v3";
+      const STORAGE_KEY = "ppt_content_v5";
 
       const editableSelectors =
         "h1, h2, h3, p, li, td, .subtitle, .meta, .accent-box";
