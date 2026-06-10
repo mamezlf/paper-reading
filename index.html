@@ -36,64 +36,6 @@
         height: 100vh;
       }
 
-      body.edit-mode [contenteditable] {
-        outline: 1px dashed var(--accent);
-        outline-offset: 4px;
-        cursor: text;
-      }
-
-      body.edit-mode [contenteditable]:focus {
-        outline: 2px solid var(--accent);
-        background: rgba(0, 82, 204, 0.03);
-      }
-
-      #edit-toolbar {
-        position: fixed;
-        top: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--text);
-        color: white;
-        padding: 0.5rem 1.5rem;
-        border-radius: 30px;
-        display: none;
-        align-items: center;
-        gap: 1.5rem;
-        z-index: 1000;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        font-family: var(--mono);
-        font-size: 0.8rem;
-      }
-
-      body.edit-mode #edit-toolbar {
-        display: flex;
-      }
-
-      #save-status {
-        color: #4caf50;
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-
-      #save-status.visible {
-        opacity: 1;
-      }
-
-      .edit-btn-small {
-        background: none;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: white;
-        padding: 0.2rem 0.6rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-family: var(--mono);
-        font-size: 0.7rem;
-      }
-
-      .edit-btn-small:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-
       #presentation {
         height: 100vh;
         width: 100vw;
@@ -351,26 +293,6 @@
     </style>
   </head>
   <body>
-    <div id="edit-toolbar">
-      <span>EDIT MODE</span>
-      <span id="save-status">SAVED</span>
-      <button
-        class="edit-btn-small"
-        id="download-html"
-        style="border-color: #4caf50; color: #4caf50"
-      >
-        DOWNLOAD
-      </button>
-      <button class="edit-btn-small" id="reset-content">RESET</button>
-      <button
-        class="edit-btn-small"
-        id="exit-edit"
-        style="border-color: #ff4d4d; color: #ff4d4d"
-      >
-        DONE
-      </button>
-    </div>
-
     <div id="presentation">
       <!-- Slide 1: Title -->
       <section class="slide title-slide active">
@@ -381,8 +303,8 @@
             Language Models
           </div>
           <div class="meta">
-            RESEARCH MEETING ・ LINGFANG ZHANG<br />
-            2026 / 06 / 10
+            RESEARCH MEETING ・ 2026 / 06 / 11<br />
+            LINGFANG ZHANG
           </div>
         </div>
         <div class="footer"><span>Title</span><span>01 / 20</span></div>
@@ -1146,121 +1068,6 @@
 
       // Initialize
       updateSlide();
-
-      /* ===== EDIT MODE LOGIC ===== */
-      const editBtn = document.getElementById("edit-mode-btn");
-      const exitBtn = document.getElementById("exit-edit");
-      const resetBtn = document.getElementById("reset-content");
-      const saveStatus = document.getElementById("save-status");
-      const STORAGE_KEY = "ppt_content_v8";
-
-      const editableSelectors =
-        "h1, h2, h3, p, li, td, .subtitle, .meta, .accent-box";
-
-      function toggleEditMode(on) {
-        document.body.classList.toggle("edit-mode", on);
-        const elements = document.querySelectorAll(editableSelectors);
-        elements.forEach((el) => {
-          // Don't make navigation or structural elements editable
-          if (!el.closest("#nav") && !el.closest("#edit-toolbar")) {
-            el.contentEditable = on;
-          }
-        });
-        if (!on) saveContent();
-      }
-
-      function saveContent() {
-        const content = {};
-        document.querySelectorAll(editableSelectors).forEach((el, index) => {
-          if (!el.closest("#nav") && !el.closest("#edit-toolbar")) {
-            content[index] = el.innerHTML;
-          }
-        });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
-
-        saveStatus.classList.add("visible");
-        setTimeout(() => saveStatus.classList.remove("visible"), 2000);
-      }
-
-      function loadContent() {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const content = JSON.parse(saved);
-          document.querySelectorAll(editableSelectors).forEach((el, index) => {
-            if (
-              !el.closest("#nav") &&
-              !el.closest("#edit-toolbar") &&
-              content[index] !== undefined
-            ) {
-              el.innerHTML = content[index];
-            }
-          });
-        }
-      }
-
-      if (editBtn) {
-        editBtn.onclick = () => toggleEditMode(true);
-      }
-      exitBtn.onclick = () => toggleEditMode(false);
-      resetBtn.onclick = () => {
-        if (confirm("Reset all changes to original content?")) {
-          localStorage.removeItem(STORAGE_KEY);
-          location.reload();
-        }
-      };
-
-      document.getElementById("download-html").onclick = () => {
-        // Ensure changes are saved to DOM
-        saveContent();
-
-        // Clone the document to modify it without affecting the live page
-        const clonedDoc = document.cloneNode(true);
-        const clonedBody = clonedDoc.body;
-
-        // Remove edit mode artifacts
-        clonedBody.classList.remove("edit-mode");
-        clonedDoc.querySelectorAll("[contenteditable]").forEach((el) => {
-          el.removeAttribute("contenteditable");
-        });
-
-        // Ensure edit toolbar is hidden in the exported version
-        // No need to remove it completely, just let the CSS hide it naturally when edit-mode class is gone
-
-        // Get the full HTML string
-        const htmlContent =
-          "<!DOCTYPE html>\n" + clonedDoc.documentElement.outerHTML;
-
-        // Create a blob and trigger download
-        const blob = new Blob([htmlContent], { type: "text/html" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "index_v2_edited.html";
-        document.body.appendChild(a);
-        a.click();
-
-        // Cleanup
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        // Show success status
-        saveStatus.innerText = "DOWNLOADED";
-        saveStatus.classList.add("visible");
-        setTimeout(() => {
-          saveStatus.classList.remove("visible");
-          setTimeout(() => (saveStatus.innerText = "SAVED"), 300); // Reset text after fade out
-        }, 2000);
-      };
-
-      // Auto-save on input
-      document.addEventListener("input", (e) => {
-        if (document.body.classList.contains("edit-mode")) {
-          saveContent();
-        }
-      });
-
-      // Load on start
-      loadContent();
     </script>
   </body>
 </html>
