@@ -234,6 +234,20 @@
         font-size: 1.3rem;
       }
 
+      a.accent-box {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        transition:
+          background-color 0.2s,
+          transform 0.2s;
+      }
+
+      a.accent-box:hover {
+        background-color: #eef4ff;
+        transform: translateY(-2px);
+      }
+
       .accent-box strong {
         display: block;
         margin-bottom: 0.5rem;
@@ -315,10 +329,10 @@
         <h2>Background</h2>
         <h3>The Original Paper</h3>
         <div class="slide-content">
-          <div class="accent-box">
+          <a class="accent-box" href="https://arxiv.org/abs/2502.12345" target="_blank" rel="noopener noreferrer">
             <strong>"False Friends Are Not Foes" (Stanford, 2025)</strong>
             Not all overlap is equal.
-          </div>
+          </a>
           <ul>
             <li>Trained bilingual models on 6 English-X language pairs</li>
             <li>
