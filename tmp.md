@@ -1,34 +1,18 @@
-Slide 14: Embedding Analysis — Method
+Slide 17: Embedding Analysis — Condition 10 Results
+(violin plot: Condition 10 — figure inserted here)
 
-Goal: test whether kanji token sharing causes the model to learn more or less aligned representations for JA and ZH
-From a middle layer (l = 6) of each trained model:
-
-For each token in Ohi_500 / Olo_500 / Random_500, sample up to 100 sentences per language from the training data
-Extract contextual embeddings → mean-pool → one static embedding per token per language: e_ja, e_zh
-Compute cosine similarity between e_ja and e_zh
+Condition 10: Ohi shared, Olo not shared
+Analogous to High-similarity Overlap in the original paper
 
 
-Three token groups compared:
+Slide 18: Embedding Analysis — Condition 10 Interpretation
+Comparing Condition 00 → Condition 10:
+Token groupCondition 00Condition 10ChangeOhi~0.78~0.75≈ no changeOlo~0.49~0.05↓ dramaticallyRandom~0.03~0.05≈ no change
 
-Ohi_500 (purple) — high-similarity kanji; should be semantically aligned across JA/ZH
-Olo_500 (blue) — low-similarity kanji; should be semantically distinct
-Random_500 (gray) — non-overlapping JA-only / ZH-only single-char tokens; anisotropy baseline
+Olo drop (0.49 → 0.05) is striking and expected: Olo is not shared in condition 10, so JA and ZH learn independent embeddings for these tokens → similarity collapses toward the random baseline
+Ohi barely changes (0.78 → 0.75): sharing token IDs brings little additional alignment gain for already semantically similar kanji
 
-
-Results visualized as violin plots (replicating original paper Figure 2)
-
-
-Slide 15: Embedding Analysis — Condition 00 Results
-(violin plot: Condition 00 — figure inserted here)
-
-Condition 00: no kanji tokens shared (Ohi and Olo both disjoint)
-X-axis: token group; Y-axis: cosine similarity between e_ja and e_zh
+Reason: parallel corpus context alone is sufficient to align semantically similar tokens — shared ID provides minimal extra signal
 
 
-Slide 16: Embedding Analysis — Condition 00 Interpretation
-
-Even without any kanji sharing, High-sim tokens show higher embedding similarity (median ~0.78) than Low-sim tokens (median ~0.49)
-
-Suggests some degree of semantic alignment emerges from shared context structure alone
-
-Low-sim tokens show a broad distribution (range ~0.12–1.0), reflecting genuine semantic divergence across languages
+Key insight: token ID sharing matters most for semantically dissimilar tokens — it is the ID sharing that forces their embeddings together (or apart), not semantic content
