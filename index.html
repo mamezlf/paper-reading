@@ -321,7 +321,7 @@
             LINGFANG ZHANG
           </div>
         </div>
-        <div class="footer"><span>Title</span><span>01 / 20</span></div>
+        <div class="footer"><span>Title</span><span>01 / 19</span></div>
       </section>
 
       <!-- Slide 2: The Original Paper -->
@@ -346,7 +346,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Kallini et al., 2025</span><span>02 / 20</span>
+          <span>Kallini et al., 2025</span><span>02 / 19</span>
         </div>
       </section>
 
@@ -379,7 +379,7 @@
             alignment?
           </p>
         </div>
-        <div class="footer"><span>JA–ZH Testbed</span><span>03 / 20</span></div>
+        <div class="footer"><span>JA–ZH Testbed</span><span>03 / 19</span></div>
       </section>
 
       <!-- Slide 4: Why Kanji Sharing? -->
@@ -410,7 +410,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Bilingual LM Research</span><span>04 / 20</span>
+          <span>Bilingual LM Research</span><span>04 / 19</span>
         </div>
       </section>
 
@@ -458,7 +458,7 @@
           </table>
         </div>
         <div class="footer">
-          <span>Overlap Breakdown</span><span>05 / 20</span>
+          <span>Overlap Breakdown</span><span>05 / 19</span>
         </div>
       </section>
 
@@ -477,7 +477,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Vocabulary Density</span><span>06 / 20</span>
+          <span>Vocabulary Density</span><span>06 / 19</span>
         </div>
       </section>
 
@@ -504,7 +504,7 @@
           </div>
         </div>
         <div class="footer">
-          <span>Research Focus</span><span>07 / 20</span>
+          <span>Research Focus</span><span>07 / 19</span>
         </div>
       </section>
 
@@ -546,7 +546,7 @@
           </table>
         </div>
         <div class="footer">
-          <span>Semantic Ambiguity</span><span>08 / 20</span>
+          <span>Semantic Ambiguity</span><span>08 / 19</span>
         </div>
       </section>
 
@@ -592,7 +592,7 @@
           </p>
         </div>
         <div class="footer">
-          <span>Embedding Analysis</span><span>09 / 20</span>
+          <span>Embedding Analysis</span><span>09 / 19</span>
         </div>
       </section>
 
@@ -617,7 +617,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Transfer Hypothesis</span><span>10 / 20</span>
+          <span>Transfer Hypothesis</span><span>10 / 19</span>
         </div>
       </section>
 
@@ -667,7 +667,7 @@
           </p>
         </div>
         <div class="footer">
-          <span>Four Conditions</span><span>11 / 20</span>
+          <span>Four Conditions</span><span>11 / 19</span>
         </div>
       </section>
 
@@ -693,7 +693,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Training Procedure</span><span>12 / 20</span>
+          <span>Training Procedure</span><span>12 / 19</span>
         </div>
       </section>
 
@@ -733,24 +733,31 @@
               <code>larryvrh/CCMatrix-v1-Ja_Zh-filtered</code>
             </li>
             <li>
-              <strong>Tokenizer:</strong> XLM-R SentencePiece (remat per
-              condition)
-            </li>
-            <li>
               <strong>Interleaving:</strong> JA/ZH shuffled and interleaved
             </li>
+            <li><strong>Seq length:</strong> 512 tokens</li>
           </ul>
         </div>
-        <div class="footer"><span>CCMatrix</span><span>13 / 20</span></div>
+        <div class="footer"><span>CCMatrix</span><span>13 / 19</span></div>
       </section>
 
-      <!-- Slide 14: Training Setup -->
+      <!-- Slide 14: Model Architecture -->
       <section class="slide">
         <h2>Training</h2>
-        <h3>Hyperparameters</h3>
+        <h3>Model Architecture</h3>
         <div class="slide-content">
           <div class="grid-2">
-            <table>
+            <ul>
+              <li>
+                <strong>Model:</strong> LlamaForCausalLM (GPT-2 Small Scale + RoPE)
+              </li>
+              <li><strong>Spec:</strong> 12 Layers / 12 Heads / 768 Hidden</li>
+              <li>
+                <strong>Execution:</strong> 4 models trained
+                <strong>from scratch</strong>
+              </li>
+            </ul>
+            <table style="font-size: 1rem; margin: 0">
               <tr>
                 <td>Total steps</td>
                 <td>20,000</td>
@@ -763,15 +770,9 @@
                 <td>Learning rate</td>
                 <td>2.5e-4</td>
               </tr>
-            </table>
-            <table>
               <tr>
                 <td>Batch size</td>
                 <td>64</td>
-              </tr>
-              <tr>
-                <td>Seq length</td>
-                <td>512</td>
               </tr>
               <tr>
                 <td>Optimizer</td>
@@ -781,32 +782,11 @@
           </div>
         </div>
         <div class="footer">
-          <span>Comparison Config</span><span>14 / 20</span>
+          <span>Llama GPT-2 Scale</span><span>14 / 19</span>
         </div>
       </section>
 
-      <!-- Slide 15: Model Architecture -->
-      <section class="slide">
-        <h2>Training</h2>
-        <h3>Model Architecture</h3>
-        <div class="slide-content">
-          <ul>
-            <li>
-              <strong>Model:</strong> LlamaForCausalLM (GPT-2 Small Scale + RoPE)
-            </li>
-            <li><strong>Spec:</strong> 12 Layers / 12 Heads / 768 Hidden</li>
-            <li>
-              <strong>Execution:</strong> 4 models trained
-              <strong>from scratch</strong>
-            </li>
-          </ul>
-        </div>
-        <div class="footer">
-          <span>Llama GPT-2 Scale</span><span>15 / 20</span>
-        </div>
-      </section>
-
-      <!-- Slide 16: Embedding Analysis Method -->
+      <!-- Slide 15: Embedding Analysis Method -->
       <section class="slide">
         <h2>Analysis</h2>
         <h3>Embedding Analysis — Method</h3>
@@ -830,11 +810,11 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Embedding Method</span><span>16 / 20</span>
+          <span>Embedding Method</span><span>15 / 19</span>
         </div>
       </section>
 
-      <!-- Slide 17: Token Groups -->
+      <!-- Slide 16: Token Groups -->
       <section class="slide">
         <h2>Analysis</h2>
         <h3>Three Token Groups Compared</h3>
@@ -843,15 +823,15 @@
             <div>
               <ul>
                 <li>
-                  <strong>Ohi_500</strong> (purple): high-similarity kanji;
+                  <strong>Ohi_500</strong> : high-similarity kanji;
                   should be semantically similar between JA/ZH
                 </li>
                 <li>
-                  <strong>Olo_500</strong> (blue): low-similarity kanji;
+                  <strong>Olo_500</strong>: low-similarity kanji;
                   should be semantically distinct
                 </li>
                 <li>
-                  <strong>Random_500</strong> (gray): non-overlapping JA-only /
+                  <strong>Random_500</strong>: non-overlapping JA-only /
                   ZH-only single-char tokens; anisotropy baseline
                 </li>
               </ul>
@@ -863,11 +843,11 @@
           </div>
         </div>
         <div class="footer">
-          <span>Token Groups</span><span>17 / 20</span>
+          <span>Token Groups</span><span>16 / 19</span>
         </div>
       </section>
 
-      <!-- Slide 18: Condition 00 Violin Plot -->
+      <!-- Slide 17: Condition 00 Violin Plot -->
       <section class="slide figure-slide">
         <h2>Analysis</h2>
         <h3>Condition 00 Violin Plot</h3>
@@ -879,11 +859,11 @@
           />
         </div>
         <div class="footer">
-          <span>Condition 00 Plot</span><span>18 / 20</span>
+          <span>Condition 00 Plot</span><span>17 / 19</span>
         </div>
       </section>
 
-      <!-- Slide 19: Condition 00 Results -->
+      <!-- Slide 18: Condition 00 Results -->
       <section class="slide">
         <h2>Analysis</h2>
         <h3>Condition 00 Results</h3>
@@ -909,7 +889,7 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Condition 00</span><span>19 / 20</span>
+          <span>Condition 00</span><span>18 / 19</span>
         </div>
       </section>
 
@@ -1023,7 +1003,7 @@
         </div>
       </section> -->
 
-      <!-- Slide 20: Status & Next Steps -->
+      <!-- Slide 19: Status & Next Steps -->
       <section class="slide">
         <h2>Conclusion</h2>
         <h3>Status & Next Steps</h3>
@@ -1043,14 +1023,14 @@
           </ul>
         </div>
         <div class="footer">
-          <span>Progress Report</span><span>20 / 20</span>
+          <span>Progress Report</span><span>19 / 19</span>
         </div>
       </section>
     </div>
 
     <div id="nav">
       <button class="nav-btn" id="prev">PREV</button>
-      <div id="counter">1 / 20</div>
+      <div id="counter">1 / 19</div>
       <button class="nav-btn" id="next">NEXT</button>
     </div>
 
