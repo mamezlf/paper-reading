@@ -481,7 +481,34 @@
         </div>
       </section>
 
-      <!-- Slide 7: Same Surface Form -->
+      <!-- Slide 7: Research Question -->
+      <section class="slide">
+        <h2>Motivation</h2>
+        <h3>Research Question</h3>
+        <div class="slide-content">
+          <p>
+            Does the semantic similarity of shared kanji affect cross-lingual
+            embedding alignment?
+          </p>
+          <div class="grid-2">
+            <div class="accent-box" style="margin: 0">
+              <strong>Semantically similar kanji</strong><br />
+              e.g. 山（mountain）<br />→ JA ＝ ZH<br />
+              Sharing = meaningful anchor?
+            </div>
+            <div class="accent-box" style="margin: 0">
+              <strong>Semantically different kanji</strong><br />
+              e.g. 手紙（letter / toilet paper）<br />→ JA ≠ ZH<br />
+              Sharing = misleading signal?
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Research Focus</span><span>07 / 20</span>
+        </div>
+      </section>
+
+      <!-- Slide 8: Same Surface Form -->
       <section class="slide">
         <h2>Motivation</h2>
         <h3>Same Surface Form ≠ Same Meaning</h3>
@@ -519,63 +546,11 @@
           </table>
         </div>
         <div class="footer">
-          <span>Semantic Ambiguity</span><span>07 / 20</span>
+          <span>Semantic Ambiguity</span><span>08 / 20</span>
         </div>
       </section>
 
-      <!-- Slide 8: Research Question -->
-      <section class="slide">
-        <h2>Motivation</h2>
-        <h3>Research Question</h3>
-        <div class="slide-content">
-          <p>
-            Does the semantic similarity of shared kanji affect cross-lingual
-            embedding alignment?
-          </p>
-          <div class="grid-2">
-            <div class="accent-box" style="margin: 0">
-              <strong>Semantically similar kanji</strong><br />
-              e.g. 山（mountain）<br />→ JA ＝ ZH<br />
-              Sharing = meaningful anchor?
-            </div>
-            <div class="accent-box" style="margin: 0">
-              <strong>Semantically different kanji</strong><br />
-              e.g. 手紙（letter / toilet paper）<br />→ JA ≠ ZH<br />
-              Sharing = misleading signal?
-            </div>
-          </div>
-        </div>
-        <div class="footer">
-          <span>Research Focus</span><span>08 / 20</span>
-        </div>
-      </section>
-
-      <!-- Slide 9: Hypothesis -->
-      <section class="slide">
-        <h2>Motivation</h2>
-        <h3>Hypothesis</h3>
-        <div class="slide-content">
-          <p>
-            If overlap mainly works through <strong>semantic transfer</strong>,
-            then similarity should determine whether sharing helps.
-          </p>
-          <ul>
-            <li>
-              <strong>High-similarity kanji sharing</strong> should improve
-              alignment
-            </li>
-            <li>
-              <strong>Low-similarity kanji sharing</strong> may weaken alignment
-              or introduce interference
-            </li>
-          </ul>
-        </div>
-        <div class="footer">
-          <span>Transfer Hypothesis</span><span>09 / 20</span>
-        </div>
-      </section>
-
-      <!-- Slide 10: Similarity Partitioning -->
+      <!-- Slide 9: Similarity Partitioning -->
       <section class="slide">
         <h2>Methodology</h2>
         <h3>Similarity Partitioning</h3>
@@ -613,38 +588,40 @@
           <p
             style="font-size: 1rem; color: var(--text-muted); margin-top: 1rem"
           >
-            * Non-kanji overlap (~22,066) always shared.
+            * Non-kanji overlap always shared.
           </p>
         </div>
         <div class="footer">
-          <span>Embedding Analysis</span><span>10 / 20</span>
+          <span>Embedding Analysis</span><span>09 / 20</span>
         </div>
       </section>
 
-      <!-- Slide 11: Layer Selection -->
+      <!-- Slide 10: Hypothesis -->
       <section class="slide">
-        <h2>Methodology</h2>
-        <h3>Layer Selection</h3>
+        <h2>Motivation</h2>
+        <h3>Hypothesis</h3>
         <div class="slide-content">
+          <p>
+            If overlap mainly works through <strong>semantic transfer</strong>,
+            then similarity should determine whether sharing helps.
+          </p>
           <ul>
-            <li>Which XLM-R layer gives the best semantic signal?</li>
             <li>
-              Layer sweep on <strong>JKVC dataset</strong> (JA–ZH cognates)
-            </li>
-            <li>Layers 1–12 tested; classification threshold sweep</li>
-            <li>
-              <strong>Result: Layer 9 achieved peak accuracy (0.6936)</strong>
+              <strong>High-similarity kanji sharing</strong> should improve
+              alignment
             </li>
             <li>
-              All scores computed using <strong>Layer 9</strong> static
-              embeddings
+              <strong>Low-similarity kanji sharing</strong> may weaken alignment
+              or introduce interference
             </li>
           </ul>
         </div>
-        <div class="footer"><span>XLM-R Sweep</span><span>11 / 20</span></div>
+        <div class="footer">
+          <span>Transfer Hypothesis</span><span>10 / 20</span>
+        </div>
       </section>
 
-      <!-- Slide 12: Experimental Design -->
+      <!-- Slide 11: Experimental Design -->
       <section class="slide">
         <h2>Design</h2>
         <h3>2×2 Factorial Conditions</h3>
@@ -686,13 +663,63 @@
             </tbody>
           </table>
           <p style="font-size: 1rem; color: var(--text-muted)">
-            * Background tokens (~25k) shared across all conditions
+            * Non-kanji overlap always shared.
           </p>
         </div>
         <div class="footer">
-          <span>Four Conditions</span><span>12 / 20</span>
+          <span>Four Conditions</span><span>11 / 20</span>
         </div>
       </section>
+
+      <!-- Slide 12: Training Procedure -->
+      <section class="slide">
+        <h2>Training</h2>
+        <h3>Training Procedure</h3>
+        <div class="slide-content">
+          <ul>
+            <li>
+              For each of the four conditions (<code>00</code>/<code>01</code>/<code>10</code>/<code>11</code>),
+              constructed a <strong>token ID map</strong> such that only the designated tokens
+              share the same ID across JA and ZH
+            </li>
+            <li>
+              Used this ID map to convert the JA–ZH parallel corpus into token
+              ID sequences
+            </li>
+            <li>
+              Trained a <strong>GPT-style model</strong> from scratch for each condition using
+              the corresponding ID-mapped corpus
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Training Procedure</span><span>12 / 20</span>
+        </div>
+      </section>
+
+      <!-- Slide 13: Layer Selection
+      <section class="slide">
+        <h2>Methodology</h2>
+        <h3>Layer Selection</h3>
+        <div class="slide-content">
+          <ul>
+            <li>Which XLM-R layer gives the best semantic signal?</li>
+            <li>
+              Layer sweep on <strong>JKVC dataset</strong> (JA–ZH cognates)
+            </li>
+            <li>Layers 1–12 tested; classification threshold sweep</li>
+            <li>
+              <strong>Result: Layer 9 achieved peak accuracy (0.6936)</strong>
+            </li>
+            <li>
+              All scores computed using <strong>Layer 9</strong> static
+              embeddings
+            </li>
+          </ul>
+        </div>
+        <div class="footer"><span>XLM-R Sweep</span><span>12 / 20</span></div>
+      </section>
+      -->
 
       <!-- Slide 13: Data & Preprocessing -->
       <section class="slide">
@@ -765,9 +792,8 @@
         <div class="slide-content">
           <ul>
             <li>
-              <strong>Model:</strong> LlamaForCausalLM (GPT-2 Small Scale)
+              <strong>Model:</strong> LlamaForCausalLM (GPT-2 Small Scale + RoPE)
             </li>
-            <li><strong>Standard:</strong> RoPE Positional Encoding</li>
             <li><strong>Spec:</strong> 12 Layers / 12 Heads / 768 Hidden</li>
             <li>
               <strong>Execution:</strong> 4 models trained
